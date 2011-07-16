@@ -60,6 +60,12 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 		}
 	}
 
+	public final double getArgDouble(World world, String arg, double def,
+		double min,
+		double max) {
+		return Math.min(Math.max(getArgDouble(world, arg, def), min), max);
+	}
+
 	public final boolean getArg(World world, String arg) {
 		checkArg(arg);
 		if (!worldArgs.containsKey(world.getName()))

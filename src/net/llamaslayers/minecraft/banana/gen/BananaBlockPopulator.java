@@ -35,6 +35,11 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 		return generators.get(world).getArgDouble(world, arg, def);
 	}
 
+	public final double getArgDouble(World world, String arg, double def,
+		double min, double max) {
+		return generators.get(world).getArgDouble(world, arg, def, min, max);
+	}
+
 	public final boolean getArg(World world, String arg) {
 		return generators.get(world).getArg(world, arg);
 	}
