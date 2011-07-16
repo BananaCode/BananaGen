@@ -1,19 +1,22 @@
 package net.llamaslayers.minecraft.banana.gen;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
 
-import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.config.Configuration;
 
 public class GenPlugin extends JavaPlugin implements Runnable, CommandExecutor {
 	public static final Map<String, BananaChunkGenerator> generators;
@@ -33,16 +36,34 @@ public class GenPlugin extends JavaPlugin implements Runnable, CommandExecutor {
 	}
 
 	public void run() {
-		Server server = getServer();
-
-		for (String world : getConfiguration().getKeys()) {
-			String generator = getConfiguration().getString(world, "");
-
-			if (server.getWorld(world) == null) {
-				server.createWorld(world, World.Environment.NORMAL,
-						getDefaultWorldGenerator(world, generator));
+		for (String conf : new String[] {/* CraftBukkit */"bukkit.yml", /* Glowstone */
+				"config/glowstone.yml" }) {
+			File confFile = new File(conf);
+			if (!confFile.exists()) {
+				continue;
 			}
+
+			Configuration bukkitYML = new Configuration(
+					confFile);
+			bukkitYML.load();
+
+			List<String> worlds = bukkitYML.getKeys("worlds");
+			if (worlds != null) {
+				for (String world : worlds) {
+					if (bukkitYML.getString(
+							"worlds." + world + ".generator",
+							".").split(":")[0]
+							.equals(getDescription().getName())
+							&& getServer().getWorld(world) == null) {
+						getServer().createWorld(world,
+								Environment.NORMAL, getDefaultWorldGenerator(world, bukkitYML.getString(
+										"worlds." + world + ".generator")));
+					}
+				}
+			}
+			return;
 		}
+		getServer().getLogger().severe("[BananaGen] Could not find server configuration file. What Bukkit implementation are you running?");
 	}
 
 	@Override
