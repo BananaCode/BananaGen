@@ -1,0 +1,13 @@
+name: BananaGen
+main: net.llamaslayers.minecraft.banana.gen.GenPlugin
+version: 0.1
+authors:
+    - Nightgunner5
+    - Dinnerbone
+    - codename_B
+load: startup
+commands:
+    bananaworld:
+        usage: /bananaworld <world> [player]
+    bananagen:
+        usage: /bananagen <radius> [<x> <z>] [world]
