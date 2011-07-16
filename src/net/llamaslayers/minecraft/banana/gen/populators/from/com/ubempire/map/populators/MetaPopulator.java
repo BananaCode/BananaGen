@@ -14,7 +14,7 @@ import org.bukkit.generator.BlockPopulator;
  */
 public class MetaPopulator extends BlockPopulator {
     private final BananaChunkGenerator generator;
-    private final BananaBlockPopulator[] list;
+    public final BananaBlockPopulator[] list;
     
     public MetaPopulator(BananaChunkGenerator generator) {
     	this.generator = generator;

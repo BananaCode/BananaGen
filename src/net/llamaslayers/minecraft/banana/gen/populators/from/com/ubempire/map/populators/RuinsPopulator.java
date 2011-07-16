@@ -14,6 +14,7 @@ public class RuinsPopulator extends BananaBlockPopulator {
 	public static final int MAX_RUINS = 3;
 	public static final int RUINS_CHANCE = 20;
 	public static final Material RUINS_MATERIAL = Material.COBBLESTONE;
+	public static final Material NETHER_RUINS_MATERIAL = Material.GLOWSTONE;
 	public static final BlockFace[] directions = new BlockFace[] {
 			BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST };
 
@@ -39,7 +40,8 @@ public class RuinsPopulator extends BananaBlockPopulator {
 					y--;
 				}
 				for (; y < startY + height; y++) {
-					source.getBlock(x, y, z).setType(RUINS_MATERIAL);
+					source.getBlock(x, y, z).setType(getArg(world, "nether") ? NETHER_RUINS_MATERIAL
+							: RUINS_MATERIAL);
 				}
 
 				height -= random.nextInt(3);
@@ -58,7 +60,8 @@ public class RuinsPopulator extends BananaBlockPopulator {
 						y--;
 					}
 					for (; y < startY + height; y++) {
-						source.getBlock(x, y, z).setType(RUINS_MATERIAL);
+						source.getBlock(x, y, z).setType(getArg(world, "nether") ? NETHER_RUINS_MATERIAL
+								: RUINS_MATERIAL);
 					}
 
 					height -= random.nextInt(3);

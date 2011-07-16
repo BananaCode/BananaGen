@@ -1,0 +1,33 @@
+hilly:
+    nopopulate:
+        type: flag
+        description: Setting this flag will disable populators
+    nether:
+        type: flag
+        description: Setting this flag will use more nether-like materials
+    baseheight:
+        type: integer
+        description: The base height that terrain is calculated from. The minimum and maximum heights (pre-population) are baseheight +- terrainheight
+        default: 70
+        min: 0
+        max: 127
+    tscale:
+        type: double
+        description: The scale on the X and Z axis. Higher numbers make terrain slope more gradually.
+        default: 64.0
+    terrainheight:
+        type: double
+        description: Higher numbers will make terrain more steep; Lower numbers make terrain more flat.
+        default: 16.0
+    waterlevel:
+        type: integer
+        description: Up to this height, valleys made by the base chunk generator will be filled with liquid (water normally, lava for nether)
+        default: 64
+        min: 0
+        max: 127
+    tree_scarcity:
+        type: integer
+        description: Higher numbers will reduce the number of trees; Lower numbers make more.
+        default: 300
+        min: 1
+        max: 2147483647

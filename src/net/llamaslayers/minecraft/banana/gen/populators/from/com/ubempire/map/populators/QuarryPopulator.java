@@ -33,7 +33,7 @@ public class QuarryPopulator extends BananaBlockPopulator {
                     Block block2 = block.getRelative(x, -y - 1, z);
                     if (block2.getTypeId() != 0 && (block2.getTypeId() < 8 || block2.getTypeId() > 11)) {
                         if (random.nextBoolean()) {
-                            block2.setType(Material.COBBLESTONE);
+                            block2.setType(getArg(world, "nether") ? Material.NETHERRACK : Material.COBBLESTONE);
                         } else {
                             block2.setType(Material.GRAVEL);
                         }

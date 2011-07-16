@@ -18,6 +18,9 @@ public class FlowerPopulator extends BananaBlockPopulator {
 
     @Override
     public void populate(World world, Random random, Chunk chunk) {
+    	if (getArg(world, "nether"))
+    		return;
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int cx = (chunk.getX() << 4) + x;

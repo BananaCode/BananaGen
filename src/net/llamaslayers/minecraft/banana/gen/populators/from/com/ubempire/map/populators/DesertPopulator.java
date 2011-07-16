@@ -18,6 +18,9 @@ public class DesertPopulator extends BananaBlockPopulator {
 
     @Override
     public void populate(World world, Random random, Chunk chunk) {
+    	Material matSand = getArg(world, "nether") ? Material.SOUL_SAND : Material.SAND;
+    	Material matDirt = getArg(world, "nether") ? Material.NETHERRACK : Material.DIRT;
+
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int tx = (chunk.getX() << 4) + x;
@@ -30,13 +33,13 @@ public class DesertPopulator extends BananaBlockPopulator {
                 // Set top few layers of grass/dirt to sand
                 for (int i = 0; i < 5; ++i) {
                     Block b2 = block.getFace(BlockFace.DOWN, i);
-                    if (b2.getType() == Material.GRASS || b2.getType() == Material.DIRT) {
-                        b2.setType(Material.SAND);
+                    if (b2.getType() == Material.GRASS || b2.getType() == matDirt) {
+                        b2.setType(matSand);
                     }
                 }
                 
                 // Generate cactus
-                if (block.getType() == Material.SAND) {
+                if (block.getType() == matSand) {
                     if (random.nextInt(20) == 0) {
                         // Make sure it's surrounded by air
                         Block base = block.getFace(BlockFace.UP);
@@ -50,9 +53,13 @@ public class DesertPopulator extends BananaBlockPopulator {
     }
 
     private void generateCactus(Block block, int height) {
-        for (int i = 0; i < height; ++i) {
-            block.getFace(BlockFace.UP, i).setType(Material.CACTUS);
-        }
+    	if (getArg(block.getWorld(), "nether")) {
+    		block.setType(Material.FIRE);
+    	} else {
+            for (int i = 0; i < height; ++i) {
+                block.getFace(BlockFace.UP, i).setType(Material.CACTUS);
+            }
+    	}
     }
     
 }

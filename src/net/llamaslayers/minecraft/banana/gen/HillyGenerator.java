@@ -12,11 +12,15 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
+@Args({ "nopopulate", "nether", "baseheight", "tscale", "terrainheight",
+		"waterlevel", "tree_scarcity" })
 public class HillyGenerator extends BananaChunkGenerator {
 	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
 
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
+		if (world != null && getArg(world, "nopopulate"))
+			return Collections.emptyList();
 		return populators;
 	}
 
@@ -56,7 +60,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 								/ getArgDouble(world, "tscale", 64.0),
 								(z + chunkZ)
 										/ getArgDouble(world, "tscale", 64.0), 4, 0.7, 0.6, true)
-						* getArgDouble(world, "terrainheight", 16), 127); y > 0; y--) {
+						* getArgDouble(world, "terrainheight", 16.0), 127); y > 0; y--) {
 					double terrainType = noise2.noise((x + chunkX) / 128.0,
 							y / 128.0, (z + chunkZ) / 128.0, 2, 0.5, 0.5, true);
 					Material ground = matTop;

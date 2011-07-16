@@ -35,7 +35,7 @@ public class LakePopulator extends BananaBlockPopulator {
         if (random.nextInt(10) < 3) {
             ry = world.getHighestBlockYAt(rx, rz) - 1;
         }
-        if (random.nextInt(96) < ry) {
+        if (random.nextInt(96) < ry && !getArg(world, "nether")) {
             liquidMaterial = Material.WATER;
             solidMaterial = Material.WATER;
         } else if (world.getBlockAt(rx, ry, rz).getBiome() == Biome.FOREST || world.getBlockAt(rx, ry, rz).getBiome() == Biome.SEASONAL_FOREST) {

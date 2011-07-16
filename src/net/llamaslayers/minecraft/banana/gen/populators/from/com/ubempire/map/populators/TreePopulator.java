@@ -17,6 +17,9 @@ public class TreePopulator extends BananaBlockPopulator {
 
     @Override
     public void populate(World world, Random random, Chunk chunk) {
+    	if (getArg(world, "nether"))
+    		return;
+
         int centerX = (chunk.getX() << 4) + random.nextInt(16);
         int centerZ = (chunk.getZ() << 4) + random.nextInt(16);
 
@@ -71,7 +74,7 @@ public class TreePopulator extends BananaBlockPopulator {
         for (int i = 0; i < multiplier; i++) {
             centerX = (chunk.getX() << 4) + random.nextInt(16);
             centerZ = (chunk.getZ() << 4) + random.nextInt(16);
-            if (random.nextInt(300) < chance) {
+            if (random.nextInt(getArgInt(world, "tree_scarcity", 300, 1, Integer.MAX_VALUE)) < chance) {
                 int centerY = world.getHighestBlockYAt(centerX, centerZ) - 1;
                 Block sourceBlock = world.getBlockAt(centerX, centerY, centerZ);
                 

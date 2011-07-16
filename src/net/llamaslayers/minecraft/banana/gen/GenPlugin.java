@@ -16,7 +16,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class GenPlugin extends JavaPlugin implements Runnable, CommandExecutor {
-	private static final Map<String, BananaChunkGenerator> generators;
+	public static final Map<String, BananaChunkGenerator> generators;
 	static {
 		generators = new HashMap<String, BananaChunkGenerator>();
 		generators.put("hilly", new HillyGenerator());
