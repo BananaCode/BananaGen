@@ -12,8 +12,9 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
-@Args({ "nopopulate", "nether", "baseheight", "tscale", "terrainheight",
-		"waterlevel", "tree_scarcity" })
+@Args({ "nopopulate", "nether", "groundcover", "baseheight", "tscale",
+		"terrainheight", "waterlevel", "tree_scarcity", "torch_max",
+		"torch_chance" })
 public class HillyGenerator extends BananaChunkGenerator {
 	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
 
@@ -45,6 +46,11 @@ public class HillyGenerator extends BananaChunkGenerator {
 		Material matShore2 = Material.GRAVEL;
 		Material matTop = getArg(world, "nether") ?
 				Material.NETHERRACK : Material.GRASS;
+		try {
+			matTop = Material.valueOf(getArgString(world, "groundcover", ""));
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		Material matUnder = getArg(world, "nether") ?
 				Material.NETHERRACK : Material.STONE;
 		Material matLiquid = getArg(world, "nether") ?

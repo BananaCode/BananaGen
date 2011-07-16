@@ -12,8 +12,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 public class TorchPopulator extends BananaBlockPopulator {
-	public static final int ITERATIONS = 3;
-	public static final int TORCH_CHANCE = 70;
 	public static final int ATTEMPTS = 30;
 	private static final BlockFace[] directions = new BlockFace[] {
 			BlockFace.UP, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
@@ -23,8 +21,8 @@ public class TorchPopulator extends BananaBlockPopulator {
 	public void populate(World world, Random random, Chunk source) {
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
 
-		for (int i = 0; i < ITERATIONS; i++) {
-			if (random.nextInt(100) < TORCH_CHANCE) {
+		for (int i = 0; i < getArgInt(world, "torch_max", 3); i++) {
+			if (random.nextInt(100) < getArgInt(world, "torch_chance", 70, 0, 100)) {
 				attemptloop: for (int j = 0; j < ATTEMPTS; j++) {
 					int x = random.nextInt(16);
 					int z = random.nextInt(16);
