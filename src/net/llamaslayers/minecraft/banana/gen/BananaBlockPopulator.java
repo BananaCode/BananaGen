@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
@@ -99,5 +101,51 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 	@SuppressWarnings("javadoc")
 	public final boolean getArg(World world, String arg) {
 		return getGen(world).getArg(world, arg);
+	}
+
+	/**
+	 * Sets a block to a specified material, but only if the block was
+	 * previously air.
+	 * 
+	 * @author codename_B
+	 * @param world
+	 *            The world in which to set the block
+	 * @param type
+	 *            The type to set the block to
+	 * @param location
+	 *            The location of the block
+	 * @return true if the block was set, false if a precondition failed
+	 */
+	protected static boolean setBlock(World world, Material type,
+		Location location) {
+		if (world.getBlockTypeIdAt(location) != 0)
+			return false;
+		world.getBlockAt(location).setType(type);
+		return true;
+	}
+
+	/**
+	 * Sets a block to a specified material, but only if the block was
+	 * previously air.
+	 * 
+	 * @author codename_B
+	 * @param world
+	 *            The world in which to set the block
+	 * @param type
+	 *            The type to set the block to
+	 * @param location
+	 *            The location of the block
+	 * @param data
+	 *            The data value to set on the block
+	 * @return true if the block was set, false if a precondition failed
+	 */
+	protected static boolean setBlock(World world, Material type,
+		Location location,
+		byte data) {
+		if (world.getBlockTypeIdAt(location) != 0)
+			return false;
+		world.getBlockAt(location).setType(type);
+		world.getBlockAt(location).setData(data);
+		return true;
 	}
 }

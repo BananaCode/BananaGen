@@ -11,3 +11,5 @@ commands:
         usage: /bananaworld <world> [player]
     bananagen:
         usage: /bananagen <radius> [<x> <z>] [world]
+    bananaregen:
+        usage: /bananaregen <radius>

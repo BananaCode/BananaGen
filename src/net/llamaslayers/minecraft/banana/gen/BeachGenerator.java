@@ -8,9 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import net.llamaslayers.minecraft.banana.gen.populators.BoatPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.CavePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.DesertPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.PalmTreePopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,15 +19,21 @@ import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
 /**
- * A generator that makes beach-like worlds, suggested in
- * {@link "http://forums.bukkit.org/threads/req-ocean-island-biome-terrain-generation.23014/"}
+ * A generator that makes beach-like worlds, as suggested on
+ * <a href="http://forums.bukkit.org/threads/23014/">the Bukkit forums</a>
  * 
  * @author Nightgunner5
  */
 @Args({ "nopopulate", "nether" })
 public class BeachGenerator extends BananaChunkGenerator {
-	private final List<BlockPopulator> populators = Arrays.asList(new CavePopulator().setDefault(this), new DesertPopulator().setDefault(this), new OrePopulator().setDefault(this));
+	private final List<BlockPopulator> populators = Arrays.asList(
+			new OrePopulator().setDefault(this),
+			new PalmTreePopulator().setDefault(this),
+			new BoatPopulator().setDefault(this));
 
+	/**
+	 * @see org.bukkit.generator.ChunkGenerator#getDefaultPopulators(org.bukkit.World)
+	 */
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
 		if (world != null && getArg(world, "nopopulate"))
@@ -57,8 +63,14 @@ public class BeachGenerator extends BananaChunkGenerator {
 							: Material.STATIONARY_WATER).getId();
 				}
 				int deep = 0;
+
 				double _y = noise.noise((x + chunkX) / 128.0, (z + chunkZ) / 128.0, 16, 0.5, 0.5, true) + 1;
-				for (int y = 56 + (int) (_y * _y * 4); y > 0; y--) {
+				_y = _y * _y * 4;
+				if (_y < 8) {
+					_y = _y * _y / 4 - 8;
+				}
+
+				for (int y = 56 + (int) _y; y > 0; y--) {
 					if (deep < noise2.noise((x + chunkX) / 64.0, (z + chunkZ) / 64.0, 8, 0.5, 0.5, true) * 3 + 5) {
 						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.SOUL_SAND
 								: Material.SAND).getId();

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A list of allowed args for a
+ * A list of allowed args for a generator and its populators
  * 
  * @author Nightgunner5
  */

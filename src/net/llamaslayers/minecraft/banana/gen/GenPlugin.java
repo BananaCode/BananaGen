@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
@@ -39,6 +40,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		getServer().getScheduler().scheduleSyncDelayedTask(this, this);
 		getCommand("bananaworld").setExecutor(this);
 		getCommand("bananagen").setExecutor(this);
+		getCommand("bananaregen").setExecutor(this);
 	}
 
 	public void run() {
@@ -75,7 +77,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
+	public boolean onCommand(final CommandSender sender, Command command,
 		String label, String[] args) {
 		if (sender.isOp()) {
 			if (label.equals("bananaworld")) {
@@ -140,6 +142,59 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 
 				new WorldRenderer(this, world, sender, x - radius, z - radius, x
 						+ radius, z + radius, 10, 10, 10).start();
+				return true;
+			} else if (label.equals("bananaregen")) {
+				if (args.length < 1)
+					return false;
+
+				final int radius;
+				try {
+					radius = Integer.parseInt(args[0]);
+				} catch (NumberFormatException ex) {
+					return false;
+				}
+
+				if (radius < 1)
+					return false;
+
+				sender.sendMessage("Starting regen...");
+				final Location start = sender instanceof Player ? ((Player) sender).getLocation()
+						: new Location(getServer().getWorlds().get(0), 0, 0, 0);
+				new Runnable() {
+					private int i = 0;
+					private int[] coords;
+					private int taskID = -1;
+					private final int startX = start.getBlockX() / 16;
+					private final int startZ = start.getBlockZ() / 16;
+
+					public void run() {
+						if (i >= coords.length / 2) {
+							getServer().getScheduler().cancelTask(taskID);
+							sender.sendMessage("Regen finished.");
+							return;
+						}
+						start.getWorld().regenerateChunk(startX + coords[i * 2], startZ
+								+ coords[i * 2 + 1]);
+						i++;
+					}
+
+					public void schedule() {
+						coords = new int[8 * radius * radius + 8 * radius + 2];
+						int _i = 0;
+						for (int r = 0; r <= radius; r++) {
+							for (int x = -r; x <= r; x++) {
+								for (int z = -r; z <= r; z++) {
+									if (Math.abs(x) == r || Math.abs(z) == r) {
+										coords[_i++] = x;
+										coords[_i++] = z;
+									}
+								}
+							}
+						}
+
+						taskID = getServer().getScheduler().scheduleSyncRepeatingTask(GenPlugin.this, this, 1, 10);
+					}
+				}.schedule();
 				return true;
 			}
 			return false;
