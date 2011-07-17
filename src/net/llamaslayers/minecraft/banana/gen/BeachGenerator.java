@@ -57,11 +57,11 @@ public class BeachGenerator extends BananaChunkGenerator {
 							: Material.STATIONARY_WATER).getId();
 				}
 				int deep = 0;
-				for (int y = 62 + (int) (noise.noise((x + chunkX) / 128.0, (z + chunkZ) / 128.0, 16, 0.5, 0.5, true) * 8); y > 0; y--) {
+				double _y = noise.noise((x + chunkX) / 128.0, (z + chunkZ) / 128.0, 16, 0.5, 0.5, true) + 1;
+				for (int y = 56 + (int) (_y * _y * 4); y > 0; y--) {
 					if (deep < noise2.noise((x + chunkX) / 64.0, (z + chunkZ) / 64.0, 8, 0.5, 0.5, true) * 3 + 5) {
 						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.SOUL_SAND
-								: (y > 64 ? Material.GRASS
-										: Material.SAND)).getId();
+								: Material.SAND).getId();
 					} else if (deep < noise2.noise((x + chunkX) / 32.0, (z + chunkZ) / 32.0, 8, 0.5, 0.5, true) * 4 + 7) {
 						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.NETHERRACK
 								: Material.SANDSTONE).getId();

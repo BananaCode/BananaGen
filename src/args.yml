@@ -23,6 +23,9 @@ hilly:
         type: double
         description: Higher numbers will make terrain more steep; Lower numbers make terrain more flat.
         default: 16.0
+    nodirt:
+        type: flag
+        description: Removes the dirt fields from the generation process.
     waterlevel:
         type: integer
         description: Up to this height, valleys made by the base chunk generator will be filled with liquid (water normally, lava for nether)

@@ -18,7 +18,7 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
  * @author Nightgunner5
  */
 @Args({ "nopopulate", "nether", "groundcover", "baseheight", "tscale",
-		"terrainheight", "waterlevel", "tree_scarcity", "torch_max",
+		"terrainheight", "nodirt", "waterlevel", "tree_scarcity", "torch_max",
 		"torch_chance" })
 public class HillyGenerator extends BananaChunkGenerator {
 	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
@@ -70,15 +70,17 @@ public class HillyGenerator extends BananaChunkGenerator {
 					double terrainType = noise2.noise((x + chunkX) / 128.0,
 							y / 128.0, (z + chunkZ) / 128.0, 2, 0.5, 0.5, true);
 					Material ground = matTop;
-					if (Math.abs(terrainType) < random.nextDouble() / 3) {
+					if (Math.abs(terrainType) < random.nextDouble() / 3
+							&& !getArg(world, "nodirt")) {
 						ground = matMain;
-					} else if (deep != 0) {
+					} else if (deep != 0
+							|| y < getArgInt(world, "waterlevel", 64, 0, 127)) {
 						ground = matMain;
 					}
 
 					if (Math.abs(y - getArgInt(world, "waterlevel", 64, 0, 127)) < 5) {
 						if (terrainType < random.nextDouble() / 2) {
-							if (terrainType < -random.nextDouble() / 6) {
+							if (terrainType < random.nextDouble() / 4) {
 								ground = matShore;
 							} else {
 								ground = matShore2;
