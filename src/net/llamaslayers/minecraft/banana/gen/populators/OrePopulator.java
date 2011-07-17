@@ -1,6 +1,3 @@
-/**
- * 
- */
 package net.llamaslayers.minecraft.banana.gen.populators;
 
 import java.util.Random;
@@ -16,6 +13,7 @@ import org.bukkit.block.Block;
  * Populates the world with ores.
  * 
  * @author Nightgunner5
+ * @author Markus Persson
  */
 public class OrePopulator extends BananaBlockPopulator {
 	/**
@@ -24,6 +22,9 @@ public class OrePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nether"))
+			return;
+
 		int[] iterations = new int[] { 10, 20, 20, 2, 8, 1, 1, 1 };
 		int[] amount = new int[] { 32, 16, 8, 8, 7, 7, 6 };
 		Material[] type = new Material[] { Material.GRAVEL, Material.COAL_ORE,
@@ -50,32 +51,32 @@ public class OrePopulator extends BananaBlockPopulator {
 		double y1 = (originY + random.nextInt(3) + 2);
 		double y2 = (originY + random.nextInt(3) + 2);
 
-		for (int i = 0; i <= amount; ++i) {
+		for (int i = 0; i <= amount; i++) {
 			double seedX = x1 + (x2 - x1) * i / amount;
 			double seedY = y1 + (y2 - y1) * i / amount;
 			double seedZ = z1 + (z2 - z1) * i / amount;
-			double size = random.nextDouble() * amount / 16;
-			double horiz = (Math.sin(i * Math.PI / amount) + 1) * size + 1;
-			double vert = (Math.sin(i * Math.PI / amount) + 1) * size + 1;
-			int startX = (int) (seedX - horiz / 2);
-			int startY = (int) (seedY - vert / 2);
-			int startZ = (int) (seedZ - horiz / 2);
-			int endX = (int) (seedX + horiz / 2);
-			int endY = (int) (seedY + vert / 2);
-			int endZ = (int) (seedZ + horiz / 2);
+			double size = ((Math.sin(i * Math.PI / amount) + 1)
+					* random.nextDouble() * amount / 16 + 1) / 2;
 
-			for (int x = startX; x <= endX; ++x) {
-				double sizeX = (x + 0.5 - seedX) / (horiz / 2);
+			int startX = (int) (seedX - size);
+			int startY = (int) (seedY - size);
+			int startZ = (int) (seedZ - size);
+			int endX = (int) (seedX + size);
+			int endY = (int) (seedY + size);
+			int endZ = (int) (seedZ + size);
+
+			for (int x = startX; x <= endX; x++) {
+				double sizeX = (x + 0.5 - seedX) / size;
 				sizeX *= sizeX;
 
 				if (sizeX < 1) {
-					for (int y = startY; y <= endY; ++y) {
-						double sizeY = (y + 0.5 - seedY) / (vert / 2);
+					for (int y = startY; y <= endY; y++) {
+						double sizeY = (y + 0.5 - seedY) / size;
 						sizeY *= sizeY;
 
 						if (sizeX + sizeY < 1) {
-							for (int z = startZ; z <= endZ; ++z) {
-								double sizeZ = (z + 0.5 - seedZ) / (horiz / 2);
+							for (int z = startZ; z <= endZ; z++) {
+								double sizeZ = (z + 0.5 - seedZ) / size;
 								sizeZ *= sizeZ;
 
 								Block block = world.getBlockAt(x, y, z);

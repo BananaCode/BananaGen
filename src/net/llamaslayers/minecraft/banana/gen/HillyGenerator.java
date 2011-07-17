@@ -1,11 +1,9 @@
 package net.llamaslayers.minecraft.banana.gen;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.MetaPopulator;
 
 import org.bukkit.Material;
@@ -15,13 +13,15 @@ import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
 /**
+ * Basic generator with lots of hills
+ * 
  * @author Nightgunner5
  */
 @Args({ "nopopulate", "nether", "groundcover", "baseheight", "tscale",
 		"terrainheight", "waterlevel", "tree_scarcity", "torch_max",
 		"torch_chance" })
 public class HillyGenerator extends BananaChunkGenerator {
-	private final List<BlockPopulator> populators = Arrays.asList(new MetaPopulator(this), new OrePopulator().setDefault(this));
+	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
 
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
