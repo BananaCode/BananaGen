@@ -5,6 +5,7 @@ authors:
     - Nightgunner5
     - Dinnerbone
     - codename_B
+    - SpaceManiac
 load: startup
 commands:
     bananaworld:
@@ -13,3 +14,12 @@ commands:
         usage: /bananagen <radius> [<x> <z>] [world]
     bananaregen:
         usage: /bananaregen <radius>
+permissions:
+    bananagen.world.self:
+        default: true
+    bananagen.world.other:
+        default: op
+    bananagen.generate:
+        default: op
+    bananagen.regenerate:
+        default: op
