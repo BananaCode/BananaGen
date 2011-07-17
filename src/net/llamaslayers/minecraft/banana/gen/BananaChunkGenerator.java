@@ -2,7 +2,11 @@ package net.llamaslayers.minecraft.banana.gen;
 
 import java.util.*;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.generator.ChunkGenerator;
 
 /**
@@ -180,8 +184,39 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 		}
 	}
 
+	private static final Set<Material> FORBIDDEN_SPAWN_FLOORS = new HashSet<Material>();
+	static {
+		// Air and liquids are already accounted for.
+		FORBIDDEN_SPAWN_FLOORS.add(Material.FIRE); // That would hurt.
+		FORBIDDEN_SPAWN_FLOORS.add(Material.CACTUS); // Ouch!
+		FORBIDDEN_SPAWN_FLOORS.add(Material.LEAVES); // Spawning on top of a tree is so 2010s.
+	}
+
+	/**
+	 * @see org.bukkit.generator.ChunkGenerator#canSpawn(org.bukkit.World, int,
+	 *      int)
+	 */
 	@Override
 	public boolean canSpawn(World world, int x, int z) {
-		return !world.getHighestBlockAt(x, z).isLiquid();
+		Block block = world.getHighestBlockAt(x, z).getRelative(BlockFace.DOWN);
+		return !block.isLiquid() && !block.isEmpty()
+				&& !FORBIDDEN_SPAWN_FLOORS.contains(block.getType());
+	}
+
+	/**
+	 * Stop spawning over water or 100 feet from the ground.
+	 * 
+	 * @see org.bukkit.generator.ChunkGenerator#getFixedSpawnLocation(org.bukkit.World,
+	 *      java.util.Random)
+	 */
+	@Override
+	public Location getFixedSpawnLocation(World world, Random random) {
+		int x = -16;
+		do {
+			x += 16;
+			world.loadChunk(x / 16, 0);
+		} while (!canSpawn(world, x, 0));
+
+		return new Location(world, x, world.getHighestBlockYAt(x, 0), 0);
 	}
 }
