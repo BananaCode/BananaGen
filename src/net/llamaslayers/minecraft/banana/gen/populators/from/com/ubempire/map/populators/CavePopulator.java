@@ -1,6 +1,7 @@
 package net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
@@ -18,83 +19,83 @@ import org.bukkit.util.Vector;
  * @author Pandarr
  */
 public class CavePopulator extends BananaBlockPopulator {
-
 	private static boolean isGenerating = false;
 
+	/**
+	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
+	 *      java.util.Random, org.bukkit.Chunk)
+	 */
 	@Override
-	public void populate(World world, Random random, Chunk chunk) {
+	public void populate(World world, Random random, Chunk source) {
 		if (isGenerating)
 			return;
 		if (random.nextInt(16) > 1)
 			return;
 
-		int rx = 4 + random.nextInt(8);
-		int rz = 4 + random.nextInt(8);
-		int maxY = world.getHighestBlockYAt(rx, rz);
+		int x = 4 + random.nextInt(8) + source.getX() * 16;
+		int z = 4 + random.nextInt(8) + source.getZ() * 16;
+		int maxY = world.getHighestBlockYAt(x, z);
 		if (maxY < 16) {
 			maxY = 32;
 		}
 
 		isGenerating = true;
-		int ry = random.nextInt(maxY);
-		ArrayList<Block> snake = startSnake(world, random, chunk.getBlock(rx, ry, rz));
+		int y = random.nextInt(maxY);
+		List<Block> snake = startSnake(world, random, x, y, z);
 		finishSnake(world, random, snake);
 
 		if (random.nextInt(16) > 5) {
-			if (ry > 36) {
-				snake = startSnake(world, random, chunk.getBlock(rx, ry / 2, rz));
+			if (y > 36) {
+				snake = startSnake(world, random, x, y / 2, z);
 				finishSnake(world, random, snake);
-			} else if (ry < 24) {
-				snake = startSnake(world, random, chunk.getBlock(rx, ry * 2, rz));
+			} else if (y < 24) {
+				snake = startSnake(world, random, x, y * 2, z);
 				finishSnake(world, random, snake);
 			}
 		}
 		isGenerating = false;
 	}
 
-	private static ArrayList<Block> startSnake(World world, Random random,
-		Block block) {
-		ArrayList<Block> snakeBlocks = new ArrayList<Block>();
+	private static List<Block> startSnake(World world, Random random,
+		int blockX, int blockY, int blockZ) {
+		List<Block> snakeBlocks = new ArrayList<Block>();
 
-		int blockX = block.getX();
-		int blockY = block.getY();
-		int blockZ = block.getZ();
 		while (world.getBlockAt(blockX, blockY, blockZ).getTypeId() != 0) {
 			if (snakeBlocks.size() > 2000) {
 				break;
 			}
 
 			if (random.nextInt(20) == 0) {
-				blockY = blockY + 1;
+				blockY++;
 			} else if (world.getBlockAt(blockX, blockY + 2, blockZ).getTypeId() == 0) {
-				blockY = blockY + 2;
+				blockY += 2;
 			} else if (world.getBlockAt(blockX + 2, blockY, blockZ).getTypeId() == 0) {
-				blockX = blockX + 1;
+				blockX++;
 			} else if (world.getBlockAt(blockX - 2, blockY, blockZ).getTypeId() == 0) {
-				blockX = blockX - 1;
+				blockX--;
 			} else if (world.getBlockAt(blockX, blockY, blockZ + 2).getTypeId() == 0) {
-				blockZ = blockZ + 1;
+				blockZ++;
 			} else if (world.getBlockAt(blockX, blockY, blockZ - 2).getTypeId() == 0) {
-				blockZ = blockZ - 1;
+				blockZ--;
 			} else if (world.getBlockAt(blockX + 1, blockY, blockZ).getTypeId() == 0) {
-				blockX = blockX + 1;
+				blockX++;
 			} else if (world.getBlockAt(blockX - 1, blockY, blockZ).getTypeId() == 0) {
-				blockX = blockX - 1;
+				blockX--;
 			} else if (world.getBlockAt(blockX, blockY, blockZ + 1).getTypeId() == 0) {
-				blockZ = blockZ + 1;
+				blockZ++;
 			} else if (world.getBlockAt(blockX, blockY, blockZ - 1).getTypeId() == 0) {
-				blockZ = blockZ - 1;
+				blockZ--;
 			} else if (random.nextBoolean()) {
 				if (random.nextBoolean()) {
-					blockX = blockX + 1;
+					blockX++;
 				} else {
-					blockZ = blockZ + 1;
+					blockZ++;
 				}
 			} else {
 				if (random.nextBoolean()) {
-					blockX = blockX - 1;
+					blockX--;
 				} else {
-					blockZ = blockZ - 1;
+					blockZ--;
 				}
 			}
 
@@ -107,7 +108,7 @@ public class CavePopulator extends BananaBlockPopulator {
 	}
 
 	private static void finishSnake(World world, Random random,
-		ArrayList<Block> snakeBlocks) {
+		List<Block> snakeBlocks) {
 		for (Block block : snakeBlocks) {
 			Vector center = new BlockVector(block.getX(), block.getY(), block.getZ());
 			if (block.getType() != Material.AIR) {
@@ -130,16 +131,7 @@ public class CavePopulator extends BananaBlockPopulator {
 	}
 
 	private static boolean canPlaceBlock(World world, int x, int y, int z) {
-		switch (world.getBlockAt(x, y, z).getType()) {
-		case AIR:
-		case WATER:
-		case STATIONARY_WATER:
-		case LAVA:
-		case STATIONARY_LAVA:
-			return false;
-		default:
-			return true;
-		}
+		Block block = world.getBlockAt(x, y, z);
+		return !block.isLiquid() && !block.isEmpty();
 	}
-
 }

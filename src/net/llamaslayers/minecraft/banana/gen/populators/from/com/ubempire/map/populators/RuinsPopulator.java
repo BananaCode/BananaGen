@@ -23,6 +23,10 @@ public class RuinsPopulator extends BananaBlockPopulator {
 	private static final BlockFace[] directions = new BlockFace[] {
 			BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST };
 
+	/**
+	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
+	 *      java.util.Random, org.bukkit.Chunk)
+	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
 		ChunkSnapshot snapshot = source.getChunkSnapshot();

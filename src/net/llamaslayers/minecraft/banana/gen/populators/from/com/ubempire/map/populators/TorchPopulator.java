@@ -22,6 +22,10 @@ public class TorchPopulator extends BananaBlockPopulator {
 			BlockFace.UP, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
 			BlockFace.WEST };
 
+	/**
+	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
+	 *      java.util.Random, org.bukkit.Chunk)
+	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
@@ -39,10 +43,14 @@ public class TorchPopulator extends BananaBlockPopulator {
 
 					Block base = source.getBlock(x, y, z);
 					for (BlockFace direction : directions) {
-						if (direction.getModX() + x > 15 || direction.getModX() + x < 0)
+						if (direction.getModX() + x > 15
+								|| direction.getModX() + x < 0) {
 							continue;
-						if (direction.getModZ() + z > 15 || direction.getModZ() + z < 0)
+						}
+						if (direction.getModZ() + z > 15
+								|| direction.getModZ() + z < 0) {
 							continue;
+						}
 						if (base.getRelative(direction).getType() == Material.AIR) {
 							base.getRelative(direction).setType(Material.TORCH);
 							break attemptloop;

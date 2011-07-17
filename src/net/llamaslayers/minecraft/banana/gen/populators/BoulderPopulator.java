@@ -9,7 +9,6 @@ import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 
 /**
  * Generates boulders for the foot of {@link MountainGenerator}
@@ -19,6 +18,10 @@ import org.bukkit.block.Block;
 public class BoulderPopulator extends BananaBlockPopulator {
 	private static final Material BOULDER_MATERIAL = Material.STONE;
 
+	/**
+	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
+	 *      java.util.Random, org.bukkit.Chunk)
+	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
 		int minY = getArgInt(world, "boulder_lowest", 20, 0, 127);
@@ -49,12 +52,8 @@ public class BoulderPopulator extends BananaBlockPopulator {
 					for (int k = -size; k < size; k++) {
 						if (i * i + j * j + k * k < size2
 								+ random.nextInt(minSize + 2)) {
-							Block block = world.getBlockAt(x + i
-									+ source.getX() * 16, y + j, z + k
-									+ source.getZ() * 16);
-							if (block.getType() == Material.AIR) {
-								block.setType(BOULDER_MATERIAL);
-							}
+							setBlock(world, x + i + source.getX() * 16, y + j, z
+									+ k + source.getZ() * 16, BOULDER_MATERIAL);
 						}
 					}
 				}

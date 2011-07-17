@@ -15,17 +15,17 @@ import org.bukkit.entity.Boat;
  * @author codename_B
  */
 public class BoatPopulator extends BananaBlockPopulator {
-
 	/**
 	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
 	 *      java.util.Random, org.bukkit.Chunk)
 	 */
 	@Override
-	public void populate(World w, Random r, Chunk c) {
-		int x = c.getX() * 16 + r.nextInt(16), z = c.getZ() * 16 + r.nextInt(16);
-		int y = w.getHighestBlockYAt(x, z);
-		if (r.nextInt(500) > 477) {
-			createBoat(w, x, y, z);
+	public void populate(World world, Random random, Chunk source) {
+		if (random.nextInt(100) < 5) {
+			int x = source.getX() * 16 + random.nextInt(16);
+			int z = source.getZ() * 16 + random.nextInt(16);
+			int y = world.getHighestBlockYAt(x, z);
+			createBoat(world, x, y, z);
 		}
 	}
 

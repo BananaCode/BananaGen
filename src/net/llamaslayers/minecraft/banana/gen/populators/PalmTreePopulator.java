@@ -5,7 +5,6 @@ import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 
@@ -15,39 +14,38 @@ import org.bukkit.World;
  * @author codename_B
  */
 public class PalmTreePopulator extends BananaBlockPopulator {
-
 	/**
 	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
 	 *      java.util.Random, org.bukkit.Chunk)
 	 */
 	@Override
-	public void populate(World w, Random r, Chunk c) {
-		int cx = c.getX() * 16 + r.nextInt(16), cz = c.getZ() * 16
-				+ r.nextInt(16);
-		int cy = w.getHighestBlockYAt(cx, cz);
-		if (r.nextInt(200) > 183) {
-			createTree(w, r, cx, cy, cz);
+	public void populate(World world, Random random, Chunk source) {
+		if (random.nextInt(100) < 9) {
+			int x = source.getX() * 16 + random.nextInt(16);
+			int z = source.getZ() * 16 + random.nextInt(16);
+			int y = world.getHighestBlockYAt(x, z);
+			createTree(world, random, x, y, z);
 		}
 	}
 
-	private static void createTree(World w, Random r, int cx, int cy, int cz) {
-		if (w.getBlockTypeIdAt(cx, cy - 1, cz) != Material.SAND.getId())
+	private static void createTree(World world, Random random, int x, int y, int z) {
+		if (world.getBlockTypeIdAt(x, y - 1, z) != Material.SAND.getId())
 			return;
-		int cp = cy + r.nextInt(3) + 4;
-		for (int i = cy; i <= cp; i++) {
-			Location l = new Location(w, cx, i, cz);
-			setBlock(w, Material.LOG, l);
+
+		int height = y + random.nextInt(3) + 4;
+		for (int i = y; i <= height; i++) {
+			setBlock(world, x, i, z, Material.LOG);
 		}
-		for (int i = 0; i < 4; i++) {
-			w.getBlockAt(cx - 1 - i, cp, cz).setType(Material.LEAVES);
-			w.getBlockAt(cx + 1 + i, cp, cz).setType(Material.LEAVES);
-			w.getBlockAt(cx, cp, cz + 1 + i).setType(Material.LEAVES);
-			w.getBlockAt(cx, cp, cz - 1 - i).setType(Material.LEAVES);
-			if (i == 3) {
-				w.getBlockAt(cx - 1 - i, cp - 1, cz).setType(Material.LEAVES);
-				w.getBlockAt(cx + 1 + i, cp - 1, cz).setType(Material.LEAVES);
-				w.getBlockAt(cx, cp - 1, cz + 1 + i).setType(Material.LEAVES);
-				w.getBlockAt(cx, cp - 1, cz - 1 - i).setType(Material.LEAVES);
+		for (int i = 1; i < 5; i++) {
+			setBlock(world, x - i, height, z, Material.LEAVES);
+			setBlock(world, x + i, height, z, Material.LEAVES);
+			setBlock(world, x, height, z + i, Material.LEAVES);
+			setBlock(world, x, height, z - i, Material.LEAVES);
+			if (i == 4) {
+				setBlock(world, x - i, height - 1, z, Material.LEAVES);
+				setBlock(world, x + i, height - 1, z, Material.LEAVES);
+				setBlock(world, x, height - 1, z + i, Material.LEAVES);
+				setBlock(world, x, height - 1, z - i, Material.LEAVES);
 			}
 		}
 	}

@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
 /**
@@ -107,20 +107,24 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 	 * Sets a block to a specified material, but only if the block was
 	 * previously air.
 	 * 
-	 * @author codename_B
 	 * @param world
 	 *            The world in which to set the block
+	 * @param x
+	 *            The x coordinate of the block
+	 * @param y
+	 *            The y coordinate of the block
+	 * @param z
+	 *            The z coordinate of the block
 	 * @param type
 	 *            The type to set the block to
-	 * @param location
-	 *            The location of the block
 	 * @return true if the block was set, false if a precondition failed
 	 */
-	protected static boolean setBlock(World world, Material type,
-		Location location) {
-		if (world.getBlockTypeIdAt(location) != 0)
+	protected static boolean setBlock(World world, int x, int y, int z,
+		Material type) {
+		Block block = world.getBlockAt(x, y, z);
+		if (block.getType() != Material.AIR)
 			return false;
-		world.getBlockAt(location).setType(type);
+		block.setType(type);
 		return true;
 	}
 
@@ -128,24 +132,26 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 	 * Sets a block to a specified material, but only if the block was
 	 * previously air.
 	 * 
-	 * @author codename_B
 	 * @param world
 	 *            The world in which to set the block
+	 * @param x
+	 *            The x coordinate of the block
+	 * @param y
+	 *            The y coordinate of the block
+	 * @param z
+	 *            The z coordinate of the block
 	 * @param type
 	 *            The type to set the block to
-	 * @param location
-	 *            The location of the block
 	 * @param data
 	 *            The data value to set on the block
 	 * @return true if the block was set, false if a precondition failed
 	 */
-	protected static boolean setBlock(World world, Material type,
-		Location location,
-		byte data) {
-		if (world.getBlockTypeIdAt(location) != 0)
+	protected static boolean setBlock(World world, int x, int y, int z,
+		Material type, byte data) {
+		Block block = world.getBlockAt(x, y, z);
+		if (block.getType() != Material.AIR)
 			return false;
-		world.getBlockAt(location).setType(type);
-		world.getBlockAt(location).setData(data);
+		block.setTypeIdAndData(type.getId(), data, true);
 		return true;
 	}
 }
