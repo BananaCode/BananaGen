@@ -1,10 +1,10 @@
 hilly:
     nopopulate:
         type: flag
-        description: Setting this flag will disable populators
+        description: Setting this flag will disable populators.
     nether:
         type: flag
-        description: Setting this flag will use more nether-like materials
+        description: Setting this flag will use more nether-like materials.
     groundcover:
         type: string
         description: The material that will be placed on top of dirt (or netherrack if nether is set). Defaults to NETHERRACK if nether is set.
@@ -45,3 +45,44 @@ hilly:
         default: 70
         min: 0
         max: 100
+mountains:
+    nopopulate:
+        type: flag
+        description: Setting this flag will disable populators.
+    boulder_chance:
+        type: integer
+        description: The chance out of 100 of a boulder being generated in a chunk.
+        default: 35
+        min: 0
+        max: 100
+    boulder_smallest:
+        type: integer
+        description: The smallest radius a boulder can have.
+        default: 2
+        min: 1
+        max: 50
+    boulder_largest:
+        type: integer
+        description: The largest radius a boulder can have.
+        default: 5
+        min: 1
+        max: 50
+    boulder_lowest:
+        type: integer
+        description: The lowest Y coordinate the center of a boulder can have.
+        default: 20
+        min: 0
+        max: 127
+    boulder_highest:
+        type: integer
+        description: The highest Y coordinate the center of a boulder can have.
+        default: 50
+        min: 0
+        max: 127
+beach:
+    nopopulate:
+        type: flag
+        description: Setting this flag will disable populators.
+    nether:
+        type: flag
+        description: Setting this flag will use more nether-like materials.

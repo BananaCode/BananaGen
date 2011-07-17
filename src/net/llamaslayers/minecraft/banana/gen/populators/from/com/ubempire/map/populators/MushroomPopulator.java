@@ -12,7 +12,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 /**
- * BlockPopulator that generates stone quarries.
+ * BlockPopulator that generates giant mushrooms in {@link Biome#TUNDRA tundra}
+ * and {@link Biome#TAIGA taiga}, a la Minecraft 1.8.
+ * 
+ * @author codename_B
  */
 public class MushroomPopulator extends BananaBlockPopulator {
 

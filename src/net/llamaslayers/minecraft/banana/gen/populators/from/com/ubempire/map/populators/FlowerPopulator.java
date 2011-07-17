@@ -13,6 +13,8 @@ import org.bukkit.block.BlockFace;
 
 /**
  * BlockPopulator that places yellow flowers, red roses, and tall grass.
+ * 
+ * @author codename_B
  */
 public class FlowerPopulator extends BananaBlockPopulator {
 

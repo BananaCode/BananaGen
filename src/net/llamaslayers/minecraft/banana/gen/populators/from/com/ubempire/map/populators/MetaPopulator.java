@@ -11,11 +11,19 @@ import org.bukkit.generator.BlockPopulator;
 
 /**
  * BlockPopulator that calls all other populators in a specific sequence.
+ * 
+ * @author codename_B
  */
 public class MetaPopulator extends BlockPopulator {
     private final BananaChunkGenerator generator;
+    /**
+     * Internal array of populators
+     */
     public final BananaBlockPopulator[] list;
     
+    /**
+     * @param generator The generator creating this populator. It will be used in {@link BananaBlockPopulator#populate(BananaChunkGenerator, World, Random, Chunk)}
+     */
     public MetaPopulator(BananaChunkGenerator generator) {
     	this.generator = generator;
 

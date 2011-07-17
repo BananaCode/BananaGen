@@ -1,16 +1,31 @@
 package net.llamaslayers.minecraft.banana.gen;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+
+import net.llamaslayers.minecraft.banana.gen.populators.BoulderPopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
+/**
+ * @author Nightgunner5
+ */
+@Args({ "nopopulate", "boulder_chance", "boulder_smallest", "boulder_largest",
+		"boulder_lowest", "boulder_highest" })
 public class MountainGenerator extends BananaChunkGenerator {
+	private final List<BlockPopulator> populators = Arrays.asList(new BoulderPopulator().setDefault(this));
+
 	@Override
-	public boolean canSpawn(World world, int x, int z) {
-		return !world.getHighestBlockAt(x, z).isLiquid();
+	public List<BlockPopulator> getDefaultPopulators(World world) {
+		if (world != null && getArg(world, "nopopulate"))
+			return Collections.emptyList();
+		return populators;
 	}
 
 	@Override

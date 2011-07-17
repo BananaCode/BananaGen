@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 
 /**
  * BlockPopulator that adds trees based on the biome.
+ * 
  * @author heldplayer
  */
 public class TreePopulator extends BananaBlockPopulator {
@@ -69,6 +70,13 @@ public class TreePopulator extends BananaBlockPopulator {
                 data = 1;
                 height = 7 + random.nextInt(3);
                 break;
+            case SKY:
+            	chance = 1;
+            	break;
+            case DESERT:
+            case HELL:
+            case ICE_DESERT:
+            	return;
         }
 
         for (int i = 0; i < multiplier; i++) {

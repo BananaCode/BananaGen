@@ -11,19 +11,25 @@ import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.W
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
-public class GenPlugin extends JavaPlugin implements Runnable, CommandExecutor {
+/**
+ * @author Nightgunner5
+ */
+public class GenPlugin extends JavaPlugin implements Runnable {
+	/**
+	 * Internal array of generators
+	 */
 	public static final Map<String, BananaChunkGenerator> generators;
 	static {
 		generators = new HashMap<String, BananaChunkGenerator>();
 		generators.put("hilly", new HillyGenerator());
 		generators.put("mountains", new MountainGenerator());
+		generators.put("beach", new BeachGenerator());
 	}
 
 	public void onDisable() {
@@ -55,9 +61,11 @@ public class GenPlugin extends JavaPlugin implements Runnable, CommandExecutor {
 							".").split(":")[0]
 							.equals(getDescription().getName())
 							&& getServer().getWorld(world) == null) {
+						String generator = bukkitYML.getString(
+								"worlds." + world + ".generator");
 						getServer().createWorld(world,
-								Environment.NORMAL, getDefaultWorldGenerator(world, bukkitYML.getString(
-										"worlds." + world + ".generator")));
+								Environment.NORMAL, getDefaultWorldGenerator(world,
+										generator.substring(generator.indexOf(':') + 1)));
 					}
 				}
 			}

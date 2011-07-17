@@ -12,7 +12,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 /**
- * BlockPopulator that coats tundra and taiga with snow.
+ * BlockPopulator that coats {@link Biome#TUNDRA tundra} and {@link Biome#TAIGA taiga} with snow.
+ * 
+ * @author codename_B
  */
 public class SnowPopulator extends BananaBlockPopulator {
 

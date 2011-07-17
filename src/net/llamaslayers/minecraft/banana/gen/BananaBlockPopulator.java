@@ -8,39 +8,96 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
+/**
+ * @author Nightgunner5
+ */
 public abstract class BananaBlockPopulator extends BlockPopulator {
 	private final Map<World, BananaChunkGenerator> generators = new HashMap<World, BananaChunkGenerator>();
+	private BananaChunkGenerator defgen = null;
 
+	/**
+	 * @param generator
+	 *            The generator to use if
+	 *            {@link BananaBlockPopulator#populate(BananaChunkGenerator, World, Random, Chunk)}
+	 *            is not used
+	 * @return this object
+	 */
+	public BlockPopulator setDefault(BananaChunkGenerator generator) {
+		defgen = generator;
+		return this;
+	}
+
+	/**
+	 * @see BlockPopulator#populate(World, Random, Chunk)
+	 * @param generator
+	 *            The generator to use to get args
+	 * @param world
+	 *            The world to generate in
+	 * @param random
+	 *            The random generator to use
+	 * @param source
+	 *            The chunk to generate for
+	 */
 	public void populate(BananaChunkGenerator generator, World world,
 		Random random, Chunk source) {
 		generators.put(world, generator);
 		populate(world, random, source);
-		generators.remove(world);
 	}
 
+	private BananaChunkGenerator getGen(World world) {
+		if (generators.containsKey(world))
+			return generators.get(world);
+		return defgen;
+	}
+
+	/**
+	 * @see BananaChunkGenerator#getArgString(World, String, String)
+	 */
+	@SuppressWarnings("javadoc")
 	public final String getArgString(World world, String arg, String def) {
-		return generators.get(world).getArgString(world, arg, def);
+		return getGen(world).getArgString(world, arg, def);
 	}
 
+	/**
+	 * @see BananaChunkGenerator#getArgInt(World, String, int)
+	 */
+	@SuppressWarnings("javadoc")
 	public final int getArgInt(World world, String arg, int def) {
-		return generators.get(world).getArgInt(world, arg, def);
+		return getGen(world).getArgInt(world, arg, def);
 	}
 
+	/**
+	 * @see BananaChunkGenerator#getArgInt(World, String, int, int, int)
+	 */
+	@SuppressWarnings("javadoc")
 	public final int getArgInt(World world, String arg, int def, int min,
 		int max) {
-		return generators.get(world).getArgInt(world, arg, def, min, max);
+		return getGen(world).getArgInt(world, arg, def, min, max);
 	}
 
+	/**
+	 * @see BananaChunkGenerator#getArgDouble(World, String, double)
+	 */
+	@SuppressWarnings("javadoc")
 	public final double getArgDouble(World world, String arg, double def) {
-		return generators.get(world).getArgDouble(world, arg, def);
+		return getGen(world).getArgDouble(world, arg, def);
 	}
 
+	/**
+	 * @see BananaChunkGenerator#getArgDouble(World, String, double, double,
+	 *      double)
+	 */
+	@SuppressWarnings("javadoc")
 	public final double getArgDouble(World world, String arg, double def,
 		double min, double max) {
-		return generators.get(world).getArgDouble(world, arg, def, min, max);
+		return getGen(world).getArgDouble(world, arg, def, min, max);
 	}
 
+	/**
+	 * @see BananaChunkGenerator#getArg(World, String)
+	 */
+	@SuppressWarnings("javadoc")
 	public final boolean getArg(World world, String arg) {
-		return generators.get(world).getArg(world, arg);
+		return getGen(world).getArg(world, arg);
 	}
 }

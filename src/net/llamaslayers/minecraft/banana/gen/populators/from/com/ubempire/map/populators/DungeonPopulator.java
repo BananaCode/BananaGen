@@ -17,6 +17,8 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 
 /**
  * A BlockPopulator that places dungeons around the map.
+ * 
+ * @author codename_B
  */
 public class DungeonPopulator extends BananaBlockPopulator {
 
@@ -116,9 +118,8 @@ public class DungeonPopulator extends BananaBlockPopulator {
     private Material pickStone() {
         if (random.nextInt(6) == 0) {
             return Material.MOSSY_COBBLESTONE;
-        } else {
-            return Material.COBBLESTONE;
         }
+		return Material.COBBLESTONE;
     }
 
     private void placeSpawner(Block block) {
@@ -173,10 +174,9 @@ public class DungeonPopulator extends BananaBlockPopulator {
             if (index == 0) {
                 // Iron sword
                 return new ItemStack(267, 1);
-            } else {
-                // Iron items
-                return new ItemStack(255 + index, 1);
             }
+			// Iron items
+			return new ItemStack(255 + index, 1);
         } else if (i > 150) {
             // Stone
             return new ItemStack(272 + index, 1);

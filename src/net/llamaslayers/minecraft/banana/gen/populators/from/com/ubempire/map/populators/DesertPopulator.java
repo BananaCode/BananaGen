@@ -13,6 +13,8 @@ import org.bukkit.block.BlockFace;
 
 /**
  * BlockPopulator that turns deserts into sand and places cacti.
+ * 
+ * @author codename_B
  */
 public class DesertPopulator extends BananaBlockPopulator {
 

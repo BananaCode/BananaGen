@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+@SuppressWarnings("javadoc")
 public class WorldRenderer implements Runnable {
 	private final int total;
 	private int count;
@@ -99,7 +100,7 @@ public class WorldRenderer implements Runnable {
 		}
 	}
 
-	private void loadChunk(World world, int x, int z) {
+	private static void loadChunk(World world, int x, int z) {
 		world.loadChunk(x + 1, z);
 		world.loadChunk(x - 1, z);
 		world.loadChunk(x, z);
@@ -107,7 +108,7 @@ public class WorldRenderer implements Runnable {
 		world.loadChunk(x, z - 1);
 	}
 
-	private void unloadChunk(World world, int x, int z) {
+	private static void unloadChunk(World world, int x, int z) {
 		world.unloadChunkRequest(x + 1, z);
 		world.unloadChunkRequest(x - 1, z);
 		world.unloadChunkRequest(x, z);

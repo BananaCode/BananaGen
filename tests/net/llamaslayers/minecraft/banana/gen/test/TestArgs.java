@@ -19,7 +19,13 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.config.Configuration;
 import org.junit.Test;
 
+/**
+ * @author Nightgunner5
+ */
 public class TestArgs {
+	/**
+	 * Make sure all args used are declared and documented
+	 */
 	@Test
 	public void test() {
 		String failarg = null;

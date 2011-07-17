@@ -13,7 +13,9 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.CreatureType;
 
 /**
- * BlockPopulator that generates stone quarries.
+ * BlockPopulator that generates rooms made of nether materials, spider webs, and monster spawners.
+ * 
+ * @author codename_B
  */
 public class SpookyRoomPopulator extends BananaBlockPopulator {
 
@@ -134,7 +136,7 @@ public class SpookyRoomPopulator extends BananaBlockPopulator {
         }
     }
 
-    private Material pickDecor(Random random, Material decor, Material wall) {
+    private static Material pickDecor(Random random, Material decor, Material wall) {
         return (random.nextInt(5) == 0) ? decor : wall;
     }
 

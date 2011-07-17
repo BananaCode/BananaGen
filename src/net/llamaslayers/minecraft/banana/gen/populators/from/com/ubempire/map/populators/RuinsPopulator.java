@@ -10,12 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 
+/**
+ * Populator from BananaMaze to make crumbling walls.
+ * 
+ * @author Nightgunner5
+ */
 public class RuinsPopulator extends BananaBlockPopulator {
-	public static final int MAX_RUINS = 3;
-	public static final int RUINS_CHANCE = 20;
-	public static final Material RUINS_MATERIAL = Material.COBBLESTONE;
-	public static final Material NETHER_RUINS_MATERIAL = Material.GLOWSTONE;
-	public static final BlockFace[] directions = new BlockFace[] {
+	private static final int MAX_RUINS = 3;
+	private static final int RUINS_CHANCE = 20;
+	private static final Material RUINS_MATERIAL = Material.COBBLESTONE;
+	private static final Material NETHER_RUINS_MATERIAL = Material.GLOWSTONE;
+	private static final BlockFace[] directions = new BlockFace[] {
 			BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST };
 
 	@Override

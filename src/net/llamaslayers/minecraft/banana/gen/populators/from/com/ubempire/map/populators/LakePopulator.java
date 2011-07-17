@@ -15,6 +15,8 @@ import org.bukkit.util.Vector;
 
 /**
  * BlockPopulator that generates lava lakes.
+ * 
+ * @author codename_B
  */
 public class LakePopulator extends BananaBlockPopulator {
 
@@ -57,7 +59,7 @@ public class LakePopulator extends BananaBlockPopulator {
         
         for (Block block : lakeBlocks) {
             // Ensure it's not air or liquid already
-            if (block.getTypeId() != 0 && (block.getTypeId() < 8 || block.getTypeId() > 11)) {
+            if (block.getTypeId() != 0 && block.isLiquid()) {
                 if (block.getY() == ry + 1) {
                     if (random.nextBoolean()) {
                         block.setType(Material.AIR);

@@ -14,6 +14,8 @@ import org.bukkit.util.Vector;
 
 /**
  * BlockPopulator for snake-based caves.
+ * 
+ * @author Pandarr
  */
 public class CavePopulator extends BananaBlockPopulator {
 
@@ -50,7 +52,8 @@ public class CavePopulator extends BananaBlockPopulator {
 		isGenerating = false;
 	}
 
-	private ArrayList<Block> startSnake(World world, Random random, Block block) {
+	private static ArrayList<Block> startSnake(World world, Random random,
+		Block block) {
 		ArrayList<Block> snakeBlocks = new ArrayList<Block>();
 
 		int blockX = block.getX();
@@ -103,7 +106,7 @@ public class CavePopulator extends BananaBlockPopulator {
 		return snakeBlocks;
 	}
 
-	private void finishSnake(World world, Random random,
+	private static void finishSnake(World world, Random random,
 		ArrayList<Block> snakeBlocks) {
 		for (Block block : snakeBlocks) {
 			Vector center = new BlockVector(block.getX(), block.getY(), block.getZ());
@@ -126,7 +129,7 @@ public class CavePopulator extends BananaBlockPopulator {
 		}
 	}
 
-	private boolean canPlaceBlock(World world, int x, int y, int z) {
+	private static boolean canPlaceBlock(World world, int x, int y, int z) {
 		switch (world.getBlockAt(x, y, z).getType()) {
 		case AIR:
 		case WATER:

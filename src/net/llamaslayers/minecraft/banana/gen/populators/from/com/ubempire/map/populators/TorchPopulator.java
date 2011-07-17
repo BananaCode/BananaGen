@@ -11,8 +11,13 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
+/**
+ * Populator from BananaMaze to place torches on random surfaces.
+ * 
+ * @author Nightgunner5
+ */
 public class TorchPopulator extends BananaBlockPopulator {
-	public static final int ATTEMPTS = 30;
+	private static final int ATTEMPTS = 30;
 	private static final BlockFace[] directions = new BlockFace[] {
 			BlockFace.UP, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST,
 			BlockFace.WEST };
