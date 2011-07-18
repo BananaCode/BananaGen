@@ -46,7 +46,6 @@ public class HillyGenerator extends BananaChunkGenerator {
 
 		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 2);
 		noiseTerrainType.setScale(1 / 128.0);
-		noiseTerrainType.setYScale(1);
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
