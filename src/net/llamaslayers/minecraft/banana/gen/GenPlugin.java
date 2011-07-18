@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -41,10 +42,12 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 	}
 
 	public void onDisable() {
+		getServer().getLogger().info("[BananaGen] Stopping...");
 		instance = null;
 	}
 
 	public void onEnable() {
+		getServer().getLogger().info("[BananaGen] Starting...");
 		instance = this;
 		getServer().getScheduler().scheduleSyncDelayedTask(this, this);
 		getCommand("bananaworld").setExecutor(this);
@@ -109,19 +112,22 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		}
 		if (player == sender) {
 			if (!sender.hasPermission("bananagen.world.self")) {
-				sender.sendMessage("You do not have permission to do that.");
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to do that.");
 				return true;
 			}
 		} else {
 			if (!sender.hasPermission("bananagen.world.other")) {
-				sender.sendMessage("You do not have permission to do that.");
+				sender.sendMessage(ChatColor.RED
+						+ "You do not have permission to do that.");
 				return true;
 			}
 		}
 		Permission worldPerm = new Permission("bananagen.world.to."
 				+ world.getName(), PermissionDefault.OP);
 		if (!sender.hasPermission(worldPerm)) {
-			sender.sendMessage("You do not have permission to do that.");
+			sender.sendMessage(ChatColor.RED
+					+ "You do not have permission to do that.");
 			return true;
 		}
 		player.teleport(world.getSpawnLocation());
@@ -130,7 +136,8 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 
 	private boolean commandGenerate(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("bananagen.generate")) {
-			sender.sendMessage("You do not have permission to do that.");
+			sender.sendMessage(ChatColor.RED
+					+ "You do not have permission to do that.");
 			return true;
 		}
 
@@ -166,7 +173,8 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		if (args.length > 3) {
 			if (sender instanceof Player
 					&& !((Player) sender).getWorld().getName().equals(args[3])) {
-				sender.sendMessage("You must be on the world you wish to generate.");
+				sender.sendMessage(ChatColor.RED
+						+ "You must be on the world you wish to generate.");
 				return true;
 			}
 			world = getServer().getWorld(args[3]);
@@ -184,7 +192,8 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 
 	private boolean commandRegenerate(final CommandSender sender, String[] args) {
 		if (!sender.hasPermission("bananagen.regenerate")) {
-			sender.sendMessage("You do not have permission to do that.");
+			sender.sendMessage(ChatColor.RED
+					+ "You do not have permission to do that.");
 			return true;
 		}
 
@@ -201,7 +210,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		if (radius < 1)
 			return false;
 
-		sender.sendMessage("Starting regeneration...");
+		sender.sendMessage(ChatColor.BLUE + "Starting regeneration...");
 		final Location start = sender instanceof Player ? ((Player) sender).getLocation()
 				: new Location(getServer().getWorlds().get(0), 0, 0, 0);
 		new Runnable() {
@@ -210,16 +219,23 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 			private int taskID = -1;
 			private final int startX = start.getBlockX() / 16;
 			private final int startZ = start.getBlockZ() / 16;
+			private int lastPercent = 0;
 
 			public void run() {
 				if (i >= coords.length / 2) {
 					getServer().getScheduler().cancelTask(taskID);
-					sender.sendMessage("Regeneration finished.");
+					sender.sendMessage(ChatColor.BLUE
+							+ "Regeneration finished.");
 					return;
 				}
 				start.getWorld().regenerateChunk(startX + coords[i * 2], startZ
 						+ coords[i * 2 + 1]);
 				i++;
+				if (i * 200 / coords.length > lastPercent) {
+					lastPercent = i * 200 / coords.length;
+					sender.sendMessage(ChatColor.GREEN + "Regenerating ("
+							+ lastPercent + "%)...");
+				}
 			}
 
 			public void schedule() {
