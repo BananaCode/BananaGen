@@ -1,10 +1,9 @@
-package net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators;
+package net.llamaslayers.minecraft.banana.gen.populators;
 
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
-import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;

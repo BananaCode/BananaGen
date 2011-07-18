@@ -20,22 +20,26 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 
 	/**
 	 * @param world
-	 *            The world to put into the cache
+	 *            The world to create OctaveGenerators for
 	 * @param octaves
-	 *            A map of {@link OctaveGenerator}s to store in the cache
+	 *            The map to put the OctaveGenerators into
 	 */
-	protected void setWorldOctaves(World world,
-		Map<String, OctaveGenerator> octaves) {
-		octaveCache.put(world, octaves);
-	}
+	protected abstract void createWorldOctaves(World world,
+		Map<String, OctaveGenerator> octaves);
 
 	/**
 	 * @param world
 	 *            The world to look for in the cache
-	 * @return The map given to {@link #setWorldOctaves(World, Map)} or null if
-	 *         it has been garbage collected or was not set yet
+	 * @return A map of {@link OctaveGenerator}s created by
+	 *         {@link #createWorldOctaves(World, Map)}
 	 */
 	protected Map<String, OctaveGenerator> getWorldOctaves(World world) {
+		if (octaveCache.get(world) == null) {
+			Map<String, OctaveGenerator> octaves = new HashMap<String, OctaveGenerator>();
+			createWorldOctaves(world, octaves);
+			octaveCache.put(world, octaves);
+			return octaves;
+		}
 		return octaveCache.get(world);
 	}
 

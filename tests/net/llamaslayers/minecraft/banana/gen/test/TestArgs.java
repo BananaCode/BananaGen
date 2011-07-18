@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.GenPlugin;
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.MetaPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.MetaPopulator;
 
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.config.Configuration;

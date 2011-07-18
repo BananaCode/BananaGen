@@ -45,24 +45,6 @@ public class BeachGenerator extends BananaChunkGenerator {
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
 		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
-		if (octaves == null) {
-			octaves = new HashMap<String, OctaveGenerator>();
-			Random seed = new Random(world.getSeed());
-
-			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 16);
-			gen.setScale(1 / 128.0);
-			octaves.put("terrainHeight", gen);
-
-			gen = new SimplexOctaveGenerator(seed, 8);
-			gen.setScale(1 / 64.0);
-			octaves.put("terrainType", gen);
-
-			gen = new SimplexOctaveGenerator(seed, 8);
-			gen.setScale(1 / 32.0);
-			octaves.put("terrainType2", gen);
-
-			setWorldOctaves(world, octaves);
-		}
 		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
 		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
 		OctaveGenerator noiseTerrainType2 = octaves.get("terrainType2");
@@ -105,5 +87,27 @@ public class BeachGenerator extends BananaChunkGenerator {
 		}
 
 		return b;
+	}
+
+	/**
+	 * @see net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator#createWorldOctaves(org.bukkit.World,
+	 *      java.util.Map)
+	 */
+	@Override
+	protected void createWorldOctaves(World world,
+		Map<String, OctaveGenerator> octaves) {
+		Random seed = new Random(world.getSeed());
+
+		OctaveGenerator gen = new SimplexOctaveGenerator(seed, 16);
+		gen.setScale(1 / 128.0);
+		octaves.put("terrainHeight", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 8);
+		gen.setScale(1 / 64.0);
+		octaves.put("terrainType", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 8);
+		gen.setScale(1 / 32.0);
+		octaves.put("terrainType2", gen);
 	}
 }

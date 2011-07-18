@@ -1,4 +1,4 @@
-package net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators;
+package net.llamaslayers.minecraft.banana.gen.populators;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,8 +1,11 @@
 package net.llamaslayers.minecraft.banana.gen;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.MetaPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.MetaPopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -38,20 +41,6 @@ public class HillyGenerator extends BananaChunkGenerator {
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
 		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
-		if (octaves == null) {
-			octaves = new HashMap<String, OctaveGenerator>();
-			Random seed = new Random(world.getSeed());
-
-			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 5);
-			gen.setScale(1 / getArgDouble(world, "tscale", 64.0));
-			octaves.put("terrainHeight", gen);
-
-			gen = new SimplexOctaveGenerator(seed, 2);
-			gen.setScale(1 / 128.0);
-			octaves.put("terrainType", gen);
-
-			setWorldOctaves(world, octaves);
-		}
 		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
 		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
 
@@ -126,5 +115,23 @@ public class HillyGenerator extends BananaChunkGenerator {
 		}
 
 		return b;
+	}
+
+	/**
+	 * @see net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator#createWorldOctaves(org.bukkit.World,
+	 *      java.util.Map)
+	 */
+	@Override
+	protected void createWorldOctaves(World world,
+		Map<String, OctaveGenerator> octaves) {
+		Random seed = new Random(world.getSeed());
+
+		OctaveGenerator gen = new SimplexOctaveGenerator(seed, 5);
+		gen.setScale(1 / getArgDouble(world, "tscale", 64.0));
+		octaves.put("terrainHeight", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 2);
+		gen.setScale(1 / 128.0);
+		octaves.put("terrainType", gen);
 	}
 }

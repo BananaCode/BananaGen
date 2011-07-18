@@ -3,9 +3,9 @@ package net.llamaslayers.minecraft.banana.gen;
 import java.util.*;
 
 import net.llamaslayers.minecraft.banana.gen.populators.BoulderPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.CavePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.FlowerPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.CavePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.FlowerPopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -42,24 +42,6 @@ public class MountainGenerator extends BananaChunkGenerator {
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
 		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
-		if (octaves == null) {
-			octaves = new HashMap<String, OctaveGenerator>();
-			Random seed = new Random(world.getSeed());
-
-			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 1);
-			gen.setScale(1 / 128.0);
-			octaves.put("terrainHeight", gen);
-
-			gen = new SimplexOctaveGenerator(seed, 2);
-			gen.setScale(1 / 128.0);
-			octaves.put("terrainType", gen);
-
-			gen = new SimplexOctaveGenerator(seed, 4);
-			gen.setScale(1 / 64.0);
-			octaves.put("terrainJitter", gen);
-
-			setWorldOctaves(world, octaves);
-		}
 		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
 		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
 		OctaveGenerator noiseTerrainJitter = octaves.get("terrainJitter");
@@ -99,5 +81,27 @@ public class MountainGenerator extends BananaChunkGenerator {
 		}
 
 		return b;
+	}
+
+	/**
+	 * @see net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator#createWorldOctaves(org.bukkit.World,
+	 *      java.util.Map)
+	 */
+	@Override
+	protected void createWorldOctaves(World world,
+		Map<String, OctaveGenerator> octaves) {
+		Random seed = new Random(world.getSeed());
+
+		OctaveGenerator gen = new SimplexOctaveGenerator(seed, 1);
+		gen.setScale(1 / 128.0);
+		octaves.put("terrainHeight", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 2);
+		gen.setScale(1 / 128.0);
+		octaves.put("terrainType", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 4);
+		gen.setScale(1 / 64.0);
+		octaves.put("terrainJitter", gen);
 	}
 }
