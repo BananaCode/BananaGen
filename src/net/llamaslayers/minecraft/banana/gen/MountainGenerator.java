@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.populators.BoulderPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.CavePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.FlowerPopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,7 +22,11 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 @Args({ "nopopulate", "boulder_chance", "boulder_smallest", "boulder_largest",
 		"boulder_lowest", "boulder_highest" })
 public class MountainGenerator extends BananaChunkGenerator {
-	private final List<BlockPopulator> populators = Arrays.asList(new BoulderPopulator().setDefault(this));
+	private final List<BlockPopulator> populators = Arrays.asList(
+			new BoulderPopulator().setDefault(this),
+			new OrePopulator().setDefault(this),
+			new CavePopulator().setDefault(this),
+			new FlowerPopulator().setDefault(this));
 
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {

@@ -26,6 +26,7 @@ public class TestArgs {
 	/**
 	 * Make sure all args used are declared and documented
 	 */
+	@SuppressWarnings("static-method")
 	@Test
 	public void test() {
 		String failarg = null;
@@ -84,7 +85,7 @@ public class TestArgs {
 		}
 	}
 
-	private String checkSource(File source, String generator,
+	private static String checkSource(File source, String generator,
 		Set<String> knownArgs, Configuration args) throws IOException {
 		byte[] buffer = new byte[(int) source.length()];
 		FileInputStream in = new FileInputStream(source);

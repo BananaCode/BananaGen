@@ -254,6 +254,10 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		throw new IllegalStateException("Unknown command " + label);
 	}
 
+	/**
+	 * @see org.bukkit.plugin.java.JavaPlugin#getDefaultWorldGenerator(java.lang.String,
+	 *      java.lang.String)
+	 */
 	@Override
 	public ChunkGenerator getDefaultWorldGenerator(String worldName, String _id) {
 		String[] args = _id.split(",");
