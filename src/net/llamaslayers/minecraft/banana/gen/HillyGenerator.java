@@ -9,8 +9,8 @@ import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.po
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.util.noise.NoiseGenerator;
-import org.bukkit.util.noise.SimplexNoiseGenerator;
+import org.bukkit.util.noise.OctaveGenerator;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 /**
  * Basic generator with lots of hills
@@ -23,6 +23,9 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 public class HillyGenerator extends BananaChunkGenerator {
 	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
 
+	/**
+	 * @see org.bukkit.generator.ChunkGenerator#getDefaultPopulators(org.bukkit.World)
+	 */
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
 		if (world != null && getArg(world, "nopopulate"))
@@ -30,11 +33,20 @@ public class HillyGenerator extends BananaChunkGenerator {
 		return populators;
 	}
 
+	/**
+	 * @see org.bukkit.generator.ChunkGenerator#generate(org.bukkit.World,
+	 *      java.util.Random, int, int)
+	 */
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-		NoiseGenerator noise = new SimplexNoiseGenerator(world);
-		NoiseGenerator noise2 = new SimplexNoiseGenerator(
-				world.getSeed() + 10163);
+		Random seed = new Random(world.getSeed());
+
+		OctaveGenerator noiseTerrainHeight = new SimplexOctaveGenerator(seed, 5);
+		noiseTerrainHeight.setScale(1 / getArgDouble(world, "tscale", 64.0));
+
+		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 2);
+		noiseTerrainType.setScale(1 / 128.0);
+		noiseTerrainType.setYScale(1);
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
@@ -62,13 +74,10 @@ public class HillyGenerator extends BananaChunkGenerator {
 			for (int z = 0; z < 16; z++) {
 				int deep = 0;
 				for (int y = (int) Math.min(getArgInt(world, "baseheight", 70, 0, 127)
-						+ noise.noise((x + chunkX)
-								/ getArgDouble(world, "tscale", 64.0),
-								(z + chunkZ)
-										/ getArgDouble(world, "tscale", 64.0), 4, 0.7, 0.6, true)
+						+ noiseTerrainHeight.noise(x + chunkX, z + chunkZ, 0.7, 0.6, true)
 						* getArgDouble(world, "terrainheight", 16.0), 127); y > 0; y--) {
-					double terrainType = noise2.noise((x + chunkX) / 128.0,
-							y / 128.0, (z + chunkZ) / 128.0, 2, 0.5, 0.5, true);
+					double terrainType = noiseTerrainType.noise(x + chunkX, y, z
+							+ chunkZ, 0.5, 0.5, true);
 					Material ground = matTop;
 					if (Math.abs(terrainType) < random.nextDouble() / 3
 							&& !getArg(world, "nodirt")) {

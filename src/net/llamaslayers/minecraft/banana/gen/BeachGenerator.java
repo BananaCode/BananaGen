@@ -15,8 +15,8 @@ import net.llamaslayers.minecraft.banana.gen.populators.PalmTreePopulator;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.util.noise.NoiseGenerator;
-import org.bukkit.util.noise.SimplexNoiseGenerator;
+import org.bukkit.util.noise.OctaveGenerator;
+import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 /**
  * A generator that makes beach-like worlds, as suggested on
@@ -47,9 +47,16 @@ public class BeachGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-		NoiseGenerator noise = new SimplexNoiseGenerator(world);
-		NoiseGenerator noise2 = new SimplexNoiseGenerator(
-				world.getSeed() + 10163);
+		Random seed = new Random(world.getSeed());
+
+		OctaveGenerator noiseTerrainHeight = new SimplexOctaveGenerator(seed, 16);
+		noiseTerrainHeight.setScale(1 / 128.0);
+
+		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 8);
+		noiseTerrainHeight.setScale(1 / 64.0);
+
+		OctaveGenerator noiseTerrainType2 = new SimplexOctaveGenerator(seed, 8);
+		noiseTerrainHeight.setScale(1 / 32.0);
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
@@ -64,17 +71,18 @@ public class BeachGenerator extends BananaChunkGenerator {
 				}
 				int deep = 0;
 
-				double _y = noise.noise((x + chunkX) / 128.0, (z + chunkZ) / 128.0, 16, 0.5, 0.5, true) + 1;
+				double _y = noiseTerrainHeight.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) + 1;
 				_y = _y * _y * 4;
 				if (_y < 8) {
 					_y = _y * _y / 4 - 8;
 				}
 
 				for (int y = 56 + (int) _y; y > 0; y--) {
-					if (deep < noise2.noise((x + chunkX) / 64.0, (z + chunkZ) / 64.0, 8, 0.5, 0.5, true) * 3 + 5) {
+					if (deep < noiseTerrainType.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 3 + 5) {
 						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.SOUL_SAND
 								: Material.SAND).getId();
-					} else if (deep < noise2.noise((x + chunkX) / 32.0, (z + chunkZ) / 32.0, 8, 0.5, 0.5, true) * 4 + 7) {
+					} else if (deep < noiseTerrainType2.noise(x + chunkX, z
+							+ chunkZ, 0.5, 0.5, true) * 4 + 7) {
 						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.NETHERRACK
 								: Material.SANDSTONE).getId();
 					} else {
