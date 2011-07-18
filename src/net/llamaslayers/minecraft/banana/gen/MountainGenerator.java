@@ -1,9 +1,6 @@
 package net.llamaslayers.minecraft.banana.gen;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import net.llamaslayers.minecraft.banana.gen.populators.BoulderPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
@@ -44,16 +41,28 @@ public class MountainGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-		Random seed = new Random(world.getSeed());
+		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
+		if (octaves == null) {
+			octaves = new HashMap<String, OctaveGenerator>();
+			Random seed = new Random(world.getSeed());
 
-		OctaveGenerator noiseTerrainHeight = new SimplexOctaveGenerator(seed, 2);
-		noiseTerrainHeight.setScale(1 / 128.0);
+			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 1);
+			gen.setScale(1 / 128.0);
+			octaves.put("terrainHeight", gen);
 
-		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 2);
-		noiseTerrainType.setScale(1 / 128.0);
+			gen = new SimplexOctaveGenerator(seed, 2);
+			gen.setScale(1 / 128.0);
+			octaves.put("terrainType", gen);
 
-		OctaveGenerator noiseTerrainJitter = new SimplexOctaveGenerator(seed, 4);
-		noiseTerrainJitter.setScale(1 / 64.0);
+			gen = new SimplexOctaveGenerator(seed, 4);
+			gen.setScale(1 / 64.0);
+			octaves.put("terrainJitter", gen);
+
+			setWorldOctaves(world, octaves);
+		}
+		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
+		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
+		OctaveGenerator noiseTerrainJitter = octaves.get("terrainJitter");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;

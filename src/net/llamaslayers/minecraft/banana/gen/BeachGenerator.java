@@ -3,10 +3,7 @@
  */
 package net.llamaslayers.minecraft.banana.gen;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import net.llamaslayers.minecraft.banana.gen.populators.BoatPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
@@ -47,16 +44,28 @@ public class BeachGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-		Random seed = new Random(world.getSeed());
+		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
+		if (octaves == null) {
+			octaves = new HashMap<String, OctaveGenerator>();
+			Random seed = new Random(world.getSeed());
 
-		OctaveGenerator noiseTerrainHeight = new SimplexOctaveGenerator(seed, 16);
-		noiseTerrainHeight.setScale(1 / 128.0);
+			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 16);
+			gen.setScale(1 / 128.0);
+			octaves.put("terrainHeight", gen);
 
-		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 8);
-		noiseTerrainHeight.setScale(1 / 64.0);
+			gen = new SimplexOctaveGenerator(seed, 8);
+			gen.setScale(1 / 64.0);
+			octaves.put("terrainType", gen);
 
-		OctaveGenerator noiseTerrainType2 = new SimplexOctaveGenerator(seed, 8);
-		noiseTerrainHeight.setScale(1 / 32.0);
+			gen = new SimplexOctaveGenerator(seed, 8);
+			gen.setScale(1 / 32.0);
+			octaves.put("terrainType2", gen);
+
+			setWorldOctaves(world, octaves);
+		}
+		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
+		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
+		OctaveGenerator noiseTerrainType2 = octaves.get("terrainType2");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;

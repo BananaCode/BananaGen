@@ -1,8 +1,6 @@
 package net.llamaslayers.minecraft.banana.gen;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import net.llamaslayers.minecraft.banana.gen.populators.from.com.ubempire.map.populators.MetaPopulator;
 
@@ -39,13 +37,23 @@ public class HillyGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
-		Random seed = new Random(world.getSeed());
+		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
+		if (octaves == null) {
+			octaves = new HashMap<String, OctaveGenerator>();
+			Random seed = new Random(world.getSeed());
 
-		OctaveGenerator noiseTerrainHeight = new SimplexOctaveGenerator(seed, 5);
-		noiseTerrainHeight.setScale(1 / getArgDouble(world, "tscale", 64.0));
+			OctaveGenerator gen = new SimplexOctaveGenerator(seed, 5);
+			gen.setScale(1 / getArgDouble(world, "tscale", 64.0));
+			octaves.put("terrainHeight", gen);
 
-		OctaveGenerator noiseTerrainType = new SimplexOctaveGenerator(seed, 2);
-		noiseTerrainType.setScale(1 / 128.0);
+			gen = new SimplexOctaveGenerator(seed, 2);
+			gen.setScale(1 / 128.0);
+			octaves.put("terrainType", gen);
+
+			setWorldOctaves(world, octaves);
+		}
+		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
+		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
