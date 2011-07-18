@@ -19,8 +19,8 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 /**
  * @author Nightgunner5
  */
-@Args({ "nopopulate", "boulder_chance", "boulder_smallest", "boulder_largest",
-		"boulder_lowest", "boulder_highest" })
+@Args({ "nopopulate", "nether", "boulder_chance", "boulder_smallest",
+		"boulder_largest", "boulder_lowest", "boulder_highest" })
 public class MountainGenerator extends BananaChunkGenerator {
 	private final List<BlockPopulator> populators = Arrays.asList(
 			new BoulderPopulator().setDefault(this),

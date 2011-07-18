@@ -52,6 +52,9 @@ mountains:
     nopopulate:
         type: flag
         description: Setting this flag will disable populators.
+    nether:
+        type: flag
+        description: Setting this flag will use more nether-like materials.
     boulder_chance:
         type: integer
         description: The chance out of 100 of a boulder being generated in a chunk.
