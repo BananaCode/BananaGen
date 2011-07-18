@@ -25,6 +25,11 @@ import org.bukkit.util.config.Configuration;
  */
 public class GenPlugin extends JavaPlugin implements Runnable {
 	/**
+	 * A reference to this plugin object for easy access
+	 */
+	public static GenPlugin instance;
+
+	/**
 	 * Internal array of generators
 	 */
 	public static final Map<String, BananaChunkGenerator> generators;
@@ -36,9 +41,11 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 	}
 
 	public void onDisable() {
+		instance = null;
 	}
 
 	public void onEnable() {
+		instance = this;
 		getServer().getScheduler().scheduleSyncDelayedTask(this, this);
 		getCommand("bananaworld").setExecutor(this);
 		getCommand("bananagen").setExecutor(this);
