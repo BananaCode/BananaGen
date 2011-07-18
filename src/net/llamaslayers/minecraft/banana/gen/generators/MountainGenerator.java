@@ -1,7 +1,9 @@
-package net.llamaslayers.minecraft.banana.gen;
+package net.llamaslayers.minecraft.banana.gen.generators;
 
 import java.util.*;
 
+import net.llamaslayers.minecraft.banana.gen.Args;
+import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.populators.BoulderPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.CavePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.FlowerPopulator;

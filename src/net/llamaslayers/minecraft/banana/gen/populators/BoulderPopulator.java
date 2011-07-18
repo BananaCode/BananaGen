@@ -3,7 +3,7 @@ package net.llamaslayers.minecraft.banana.gen.populators;
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
-import net.llamaslayers.minecraft.banana.gen.MountainGenerator;
+import net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;

@@ -1,10 +1,12 @@
-package net.llamaslayers.minecraft.banana.gen;
+package net.llamaslayers.minecraft.banana.gen.generators;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.llamaslayers.minecraft.banana.gen.Args;
+import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.populators.MetaPopulator;
 
 import org.bukkit.Material;

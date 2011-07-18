@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
+import net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator;
+import net.llamaslayers.minecraft.banana.gen.generators.HillyGenerator;
+import net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
