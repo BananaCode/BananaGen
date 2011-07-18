@@ -70,13 +70,16 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 					if (bukkitYML.getString(
 							"worlds." + world + ".generator",
 							".").split(":")[0]
-							.equals(getDescription().getName())
-							&& getServer().getWorld(world) == null) {
+							.equals(getDescription().getName())) {
 						String generator = bukkitYML.getString(
 								"worlds." + world + ".generator");
-						getServer().createWorld(world,
-								Environment.NORMAL, getDefaultWorldGenerator(world,
-										generator.substring(generator.indexOf(':') + 1)));
+						// Get the new args into the cache even if the world is already loaded
+						getDefaultWorldGenerator(world, generator.substring(generator.indexOf(':') + 1));
+						if (getServer().getWorld(world) == null) {
+							getServer().createWorld(world,
+									Environment.NORMAL, getDefaultWorldGenerator(world,
+											generator.substring(generator.indexOf(':') + 1)));
+						}
 					}
 				}
 			}
