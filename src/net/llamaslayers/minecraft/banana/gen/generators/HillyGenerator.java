@@ -1,17 +1,15 @@
 package net.llamaslayers.minecraft.banana.gen.generators;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
-import net.llamaslayers.minecraft.banana.gen.populators.MetaPopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.*;
 
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.OctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -24,16 +22,26 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 		"terrainheight", "nodirt", "waterlevel", "tree_scarcity", "torch_max",
 		"torch_chance" })
 public class HillyGenerator extends BananaChunkGenerator {
-	private final List<BlockPopulator> populators = Collections.singletonList((BlockPopulator) new MetaPopulator(this));
-
-	/**
-	 * @see org.bukkit.generator.ChunkGenerator#getDefaultPopulators(org.bukkit.World)
-	 */
-	@Override
-	public List<BlockPopulator> getDefaultPopulators(World world) {
-		if (world != null && getArg(world, "nopopulate"))
-			return Collections.emptyList();
-		return populators;
+	{
+		populators = Arrays.asList(
+				// In-ground
+				new QuarryPopulator().setDefault(this),
+				new LakePopulator().setDefault(this),
+				// On-ground
+				// Desert is before tree and mushroom but snow is after so trees have snow on top
+				new DesertPopulator().setDefault(this),
+				new RuinsPopulator().setDefault(this),
+				new TreePopulator().setDefault(this),
+				new MushroomPopulator().setDefault(this),
+				new SnowPopulator().setDefault(this),
+				new FlowerPopulator().setDefault(this),
+				// Below-ground
+				new SpookyRoomPopulator().setDefault(this),
+				new DungeonPopulator().setDefault(this),
+				new CavePopulator().setDefault(this),
+				new TorchPopulator().setDefault(this),
+				new OrePopulator().setDefault(this)
+				);
 	}
 
 	/**

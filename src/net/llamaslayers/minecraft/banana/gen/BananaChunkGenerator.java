@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.OctaveGenerator;
 
@@ -16,6 +17,21 @@ import com.google.common.collect.MapMaker;
  * @author Nightgunner5
  */
 public abstract class BananaChunkGenerator extends ChunkGenerator {
+	/**
+	 * Populators to be returned by {@link #getDefaultPopulators(World)}
+	 */
+	protected List<BlockPopulator> populators;
+
+	/**
+	 * @see org.bukkit.generator.ChunkGenerator#getDefaultPopulators(org.bukkit.World)
+	 */
+	@Override
+	public final List<BlockPopulator> getDefaultPopulators(World world) {
+		if (world != null && getArg(world, "nopopulate"))
+			return Collections.emptyList();
+		return populators;
+	}
+
 	private final Map<World, Map<String, OctaveGenerator>> octaveCache = new MapMaker().weakKeys().makeMap();
 
 	/**
@@ -33,7 +49,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 * @return A map of {@link OctaveGenerator}s created by
 	 *         {@link #createWorldOctaves(World, Map)}
 	 */
-	protected Map<String, OctaveGenerator> getWorldOctaves(World world) {
+	protected final Map<String, OctaveGenerator> getWorldOctaves(World world) {
 		if (octaveCache.get(world) == null) {
 			Map<String, OctaveGenerator> octaves = new HashMap<String, OctaveGenerator>();
 			createWorldOctaves(world, octaves);

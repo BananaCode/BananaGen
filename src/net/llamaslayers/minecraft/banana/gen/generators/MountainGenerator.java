@@ -1,6 +1,8 @@
 package net.llamaslayers.minecraft.banana.gen.generators;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
@@ -11,7 +13,6 @@ import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.noise.OctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -21,20 +22,13 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 @Args({ "nopopulate", "nether", "boulder_chance", "boulder_smallest",
 		"boulder_largest", "boulder_lowest", "boulder_highest" })
 public class MountainGenerator extends BananaChunkGenerator {
-	private final List<BlockPopulator> populators = Arrays.asList(
-			new BoulderPopulator().setDefault(this),
-			new OrePopulator().setDefault(this),
-			new CavePopulator().setDefault(this),
-			new FlowerPopulator().setDefault(this));
-
-	/**
-	 * @see org.bukkit.generator.ChunkGenerator#getDefaultPopulators(org.bukkit.World)
-	 */
-	@Override
-	public List<BlockPopulator> getDefaultPopulators(World world) {
-		if (world != null && getArg(world, "nopopulate"))
-			return Collections.emptyList();
-		return populators;
+	{
+		populators = Arrays.asList(
+				new BoulderPopulator().setDefault(this),
+				new OrePopulator().setDefault(this),
+				new CavePopulator().setDefault(this),
+				new FlowerPopulator().setDefault(this)
+				);
 	}
 
 	/**

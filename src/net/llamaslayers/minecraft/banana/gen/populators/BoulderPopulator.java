@@ -3,7 +3,6 @@ package net.llamaslayers.minecraft.banana.gen.populators;
 import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
-import net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
@@ -11,7 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 /**
- * Generates boulders for the foot of {@link MountainGenerator}
+ * Generates boulders for the foot of
+ * {@link net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator a
+ * mountain}
  * 
  * @author Nightgunner5
  */

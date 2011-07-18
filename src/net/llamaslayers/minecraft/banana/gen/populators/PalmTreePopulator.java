@@ -9,7 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 /**
- * Generate palm trees, like those one would find on a beach.
+ * Generate palm trees, like those one would find on a
+ * {@link net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator beach}
+ * .
  * 
  * @author codename_B
  */
@@ -28,7 +30,8 @@ public class PalmTreePopulator extends BananaBlockPopulator {
 		}
 	}
 
-	private static void createTree(World world, Random random, int x, int y, int z) {
+	private static void createTree(World world, Random random, int x, int y,
+		int z) {
 		if (world.getBlockTypeIdAt(x, y - 1, z) != Material.SAND.getId())
 			return;
 

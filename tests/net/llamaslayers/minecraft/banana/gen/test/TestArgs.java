@@ -11,9 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.llamaslayers.minecraft.banana.gen.Args;
-import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.GenPlugin;
-import net.llamaslayers.minecraft.banana.gen.populators.MetaPopulator;
 
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.util.config.Configuration;
@@ -40,6 +38,8 @@ public class TestArgs {
 			if (declaredArgs != null) {
 				for (String arg : declaredArgs.value()) {
 					if (args.getString(generator + "." + arg + ".description", "TODO").equals("TODO")) {
+						System.err.println(generator + "." + arg
+								+ ".description = TODO");
 						failarg = arg;
 						failgen = generator;
 					}
@@ -55,22 +55,11 @@ public class TestArgs {
 					failarg = failed;
 				}
 				for (BlockPopulator populator : GenPlugin.generators.get(generator).getDefaultPopulators(null)) {
-					if (populator instanceof MetaPopulator) {
-						for (BananaBlockPopulator pop : ((MetaPopulator) populator).list) {
-							failed = checkSource(new File("src", pop.getClass().getName().replace('.', '/')
-									+ ".java"), generator, knownArgs, args);
-							if (failed != null) {
-								failgen = generator;
-								failarg = failed;
-							}
-						}
-					} else {
-						failed = checkSource(new File("src", populator.getClass().getName().replace('.', '/')
-								+ ".java"), generator, knownArgs, args);
-						if (failed != null) {
-							failgen = generator;
-							failarg = failed;
-						}
+					failed = checkSource(new File("src", populator.getClass().getName().replace('.', '/')
+							+ ".java"), generator, knownArgs, args);
+					if (failed != null) {
+						failgen = generator;
+						failarg = failed;
 					}
 				}
 			} catch (IOException ex) {
@@ -114,11 +103,14 @@ public class TestArgs {
 			String max = m.group(5);
 
 			if (!knownArgs.contains(arg)) {
+				System.err.println(generator + "." + arg + " is undeclared");
 				failed = arg;
 			}
 
 			args.getString(generator + "." + arg + ".type", type);
 			if (args.getString(generator + "." + arg + ".description", "TODO").equals("TODO")) {
+				System.err.println(generator + "." + arg
+						+ ".description = TODO");
 				failed = arg;
 			}
 			if (!type.equals("flag")) {
