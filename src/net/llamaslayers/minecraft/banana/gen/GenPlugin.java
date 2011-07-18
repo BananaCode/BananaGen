@@ -41,11 +41,13 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		generators.put("beach", new BeachGenerator());
 	}
 
+	@Override
 	public void onDisable() {
 		getServer().getLogger().info("[BananaGen] Stopping...");
 		instance = null;
 	}
 
+	@Override
 	public void onEnable() {
 		getServer().getLogger().info("[BananaGen] Starting...");
 		instance = this;
@@ -55,6 +57,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		getCommand("bananaregen").setExecutor(this);
 	}
 
+	@Override
 	public void run() {
 		for (String conf : new String[] {/* CraftBukkit */"bukkit.yml", /* Glowstone */
 				"config/glowstone.yml" }) {
@@ -186,7 +189,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 			return false;
 
 		new WorldRenderer(this, world, sender, x - radius, z - radius, x
-				+ radius, z + radius, 10, 10, 10).start();
+				+ radius, z + radius, 4, 4, 10).start();
 		return true;
 	}
 
@@ -221,6 +224,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 			private final int startZ = start.getBlockZ() / 16;
 			private int lastPercent = 0;
 
+			@Override
 			public void run() {
 				if (i >= coords.length / 2) {
 					getServer().getScheduler().cancelTask(taskID);

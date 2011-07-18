@@ -35,6 +35,7 @@ public class CavePopulator extends BananaBlockPopulator {
 		/**
 		 * @see java.lang.Runnable#run()
 		 */
+		@Override
 		public void run() {
 			finishSnake(world, random, snake);
 		}

@@ -49,7 +49,9 @@ public class WorldRenderer implements Runnable {
 			jobid = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 1, speed);
 			sender.sendMessage(ChatColor.BLUE + "Starting generation from "
 					+ startx + "," + startz + " to " + endx + "," + endz
-					+ " - " + total + " total chunks.");
+					+ " - " + total + " total chunks. Estimated time: "
+					+ ((endx - startx) / stepx * (endz - startz) / stepz
+							* speed / 20) + " seconds.");
 		}
 	}
 
@@ -59,6 +61,7 @@ public class WorldRenderer implements Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 		loadChunks(world, curx, curz, Math.min(curx + stepx, endx), Math.min(curz
 				+ stepz, endz));
