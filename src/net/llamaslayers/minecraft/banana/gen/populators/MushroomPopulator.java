@@ -33,20 +33,23 @@ public class MushroomPopulator extends BananaBlockPopulator {
 				+ rx, (source.getZ() << 4) + rz), rz);
 		if (block.getBiome() != Biome.TAIGA && block.getBiome() != Biome.TUNDRA)
 			return;
-		if (block.getRelative(BlockFace.DOWN).getType() != Material.GRASS)
+		if (block.getRelative(BlockFace.DOWN).getType() != Material.GRASS
+				&& block.getRelative(BlockFace.DOWN).getType() != Material.DIRT)
 			return;
 
 		int size = 2 + random.nextInt(4);
 		for (int i = 0; i <= size + 1; i++) {
 			Block mushroom = block.getRelative(0, i, 0);
-			mushroom.setType(Material.LOG);
-			mushroom.setData((byte) 2);
+			mushroom.setTypeIdAndData(Material.LOG.getId(), (byte) 2, true);
 
 			if (i >= size) {
 				int diff = i - size;
+				int diffNext = i - size + 1;
 				for (int x = -size + diff; x <= size - diff; x++) {
 					for (int z = -size + diff; z <= size - diff; z++) {
-						if (x * x + z * z < (size - diff) * (size - diff)) {
+						if (x * x + z * z < (size - diff) * (size - diff)
+								&& (i > size || x * x + z * z + 1 > (size - diffNext)
+										* (size - diffNext))) {
 							mushroom.getRelative(x, 0, z).setType(Material.STONE);
 						}
 					}

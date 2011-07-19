@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package net.llamaslayers.minecraft.banana.gen.populators;
 
 import java.util.Random;
@@ -8,17 +11,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 /**
- * Generate palm trees, like those one would find on a
- * {@link net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator beach}
- * .
- * 
- * @author codename_B
  * @author Nightgunner5
  */
-public class PalmTreePopulator extends BuildingPopulator {
+public class ShipwreckPopulator extends BuildingPopulator {
 	@SuppressWarnings("javadoc")
-	public PalmTreePopulator() {
-		super("palmtrees");
+	public ShipwreckPopulator() {
+		super("shipwrecks");
 	}
 
 	/**
@@ -38,7 +36,7 @@ public class PalmTreePopulator extends BuildingPopulator {
 
 		Building building = getRandomBuilding(block, random);
 		if (building != null) {
-			building.maybePlace(block, random);
+			building.maybePlaceDestroyed(block, random, 20, 60);
 		}
 	}
 }

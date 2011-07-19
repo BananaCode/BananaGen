@@ -12,6 +12,7 @@ import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.populators.BoatPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.PalmTreePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.ShipwreckPopulator;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -30,7 +31,8 @@ public class BeachGenerator extends BananaChunkGenerator {
 		populators = Arrays.asList(
 				new OrePopulator().setDefault(this),
 				new PalmTreePopulator().setDefault(this),
-				new BoatPopulator().setDefault(this)
+				new BoatPopulator().setDefault(this),
+				new ShipwreckPopulator().setDefault(this)
 				);
 	}
 

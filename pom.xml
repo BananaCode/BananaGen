@@ -67,7 +67,26 @@
 					<include>plugin.yml</include>
 				</includes>
 			</resource>
+			<resource>
+				<targetPath>buildings</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/buildings/</directory>
+				<includes>
+					<include>**/*.bo2</include>
+				</includes>
+			</resource>
 		</resources>
+
+		<testResources>
+			<testResource>
+				<targetPath>buildings</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/buildings/</directory>
+				<includes>
+					<include>**/*.bo2</include>
+				</includes>
+			</testResource>
+		</testResources>
 
 		<plugins>
 			<plugin>
