@@ -6,6 +6,7 @@ import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 
 import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -28,16 +29,22 @@ public class LakePopulator extends BananaBlockPopulator {
 		if (random.nextInt(10) > 1)
 			return;
 
-		int rx = (source.getX() << 4) + random.nextInt(16);
-		int rz = (source.getZ() << 4) + random.nextInt(16);
-		int ry = 6 + random.nextInt(world.getHighestBlockYAt(rx, rz) - 3);
+		ChunkSnapshot snapshot = source.getChunkSnapshot();
+
+		int rx16 = random.nextInt(16);
+		int rx = (source.getX() << 16) + rx16;
+		int rz16 = random.nextInt(16);
+		int rz = (source.getZ() << 16) + rz16;
+		if (snapshot.getHighestBlockYAt(rx16, rz16) < 4)
+			return;
+		int ry = 6 + random.nextInt(snapshot.getHighestBlockYAt(rx16, rz16) - 3);
 		int radius = 2 + random.nextInt(3);
 
 		Material liquidMaterial = Material.LAVA;
 		Material solidMaterial = Material.OBSIDIAN;
 
 		if (random.nextInt(10) < 3) {
-			ry = world.getHighestBlockYAt(rx, rz) - 1;
+			ry = snapshot.getHighestBlockYAt(rx16, rz16) - 1;
 		}
 		if (random.nextInt(96) < ry && !getArg(world, "nether")) {
 			liquidMaterial = Material.WATER;

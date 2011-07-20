@@ -72,7 +72,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 		worldArgs.put(world, parsedArgs);
 		for (String arg : args) {
 			if (arg.indexOf('=') > -1) {
-				parsedArgs.put(arg.substring(0, arg.indexOf('=')), arg.substring(arg.indexOf('=')));
+				parsedArgs.put(arg.substring(0, arg.indexOf('=')), arg.substring(arg.indexOf('=') + 1));
 			} else {
 				parsedArgs.put(arg, "");
 			}
@@ -89,7 +89,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 * @return the value of the arg, or def if the arg is not defined
 	 */
 	public final String getArgString(World world, String arg, String def) {
-		checkArg(arg);
+		//checkArg(arg);
 		if (!worldArgs.containsKey(world.getName()))
 			return def;
 		if (!worldArgs.get(world.getName()).containsKey(arg))
@@ -108,7 +108,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 *         an integer
 	 */
 	public final int getArgInt(World world, String arg, int def) {
-		checkArg(arg);
+		//checkArg(arg);
 		if (!worldArgs.containsKey(world.getName()))
 			return def;
 		if (!worldArgs.get(world.getName()).containsKey(arg))
@@ -116,6 +116,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 		try {
 			return Integer.parseInt(worldArgs.get(world.getName()).get(arg));
 		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
 			return def;
 		}
 	}
@@ -150,7 +151,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 *         a double
 	 */
 	public final double getArgDouble(World world, String arg, double def) {
-		checkArg(arg);
+		//checkArg(arg);
 		if (!worldArgs.containsKey(world.getName()))
 			return def;
 		if (!worldArgs.get(world.getName()).containsKey(arg))
@@ -158,6 +159,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 		try {
 			return Double.parseDouble(worldArgs.get(world.getName()).get(arg));
 		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
 			return def;
 		}
 	}
@@ -190,45 +192,37 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 * @return true if the arg was specified for the world, false if it was not
 	 */
 	public final boolean getArg(World world, String arg) {
-		checkArg(arg);
+		//checkArg(arg);
 		if (!worldArgs.containsKey(world.getName()))
 			return false;
 		return worldArgs.get(world.getName()).containsKey(arg);
 	}
 
-	private Set<String> args = null;
+	/*private Set<String> args = null;
 
 	private void checkArg(String arg) throws RuntimeException {
-		if (args != null) {
-			if (!args.contains(arg)) {
+		if (args == null) {
+			Args allowed = getClass().getAnnotation(Args.class);
+			if (allowed == null || allowed.value().length == 0) {
 				RuntimeException ex = new RuntimeException("Argument " + arg
-						+ " is not declared!");
+						+ " is not declared in class " + getClass().getName()
+						+ "!");
 				ex.fillInStackTrace();
 				throw ex;
 			}
-			return;
-		}
-		Args allowed = getClass().getAnnotation(Args.class);
-		if (allowed == null || allowed.value().length == 0) {
-			args = Collections.emptySet();
-
-			RuntimeException ex = new RuntimeException("Argument " + arg
-					+ " is not declared!");
-			ex.fillInStackTrace();
-			throw ex;
-		}
-		args = new HashSet<String>();
-		for (String allowedArg : allowed.value()) {
-			args.add(allowedArg);
+			args = new HashSet<String>();
+			for (String allowedArg : allowed.value()) {
+				args.add(allowedArg);
+			}
 		}
 
 		if (!args.contains(arg)) {
 			RuntimeException ex = new RuntimeException("Argument " + arg
-					+ " is not declared!");
+					+ " is not declared in class " + getClass().getName() + "!");
 			ex.fillInStackTrace();
 			throw ex;
 		}
-	}
+	}*/
 
 	private static final Set<Material> FORBIDDEN_SPAWN_FLOORS = new HashSet<Material>();
 	static {

@@ -157,7 +157,6 @@
 							<include>com.google.guava:*</include>
 						</includes>
 					</artifactSet>
-					<minimizeJar>true</minimizeJar>
 				</configuration>
 			</plugin>
 		</plugins>

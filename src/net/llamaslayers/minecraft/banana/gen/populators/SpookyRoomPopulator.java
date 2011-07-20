@@ -4,11 +4,13 @@ import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.CreatureType;
 
@@ -101,15 +103,24 @@ public class SpookyRoomPopulator extends BananaBlockPopulator {
 				Block block = world.getBlockAt(x, minY, z);
 				if (floor < 12) {
 					block.setType(Material.MOB_SPAWNER);
-					CreatureSpawner spawner = (CreatureSpawner) block.getState();
-					if (floor <= 2) {
-						spawner.setCreatureType(CreatureType.ZOMBIE);
-					} else if (floor >= 3 && floor <= 7) {
-						spawner.setCreatureType(CreatureType.SPIDER);
-					} else if (floor >= 8 && floor <= 10) {
-						spawner.setCreatureType(CreatureType.SKELETON);
+					BlockState state = block.getState();
+					if (state instanceof CreatureSpawner) {
+						CreatureSpawner spawner = (CreatureSpawner) state;
+						if (floor <= 2) {
+							spawner.setCreatureType(CreatureType.ZOMBIE);
+						} else if (floor >= 3 && floor <= 7) {
+							spawner.setCreatureType(CreatureType.SPIDER);
+						} else if (floor >= 8 && floor <= 10) {
+							spawner.setCreatureType(CreatureType.SKELETON);
+						} else {
+							spawner.setCreatureType(CreatureType.GHAST);
+						}
 					} else {
-						spawner.setCreatureType(CreatureType.GHAST);
+						Bukkit.getServer().getLogger().severe("Spawner is not giving correct state, returned "
+								+ state
+								+ " (block type: "
+								+ block.getType()
+								+ ", state type: " + state.getType() + ")");
 					}
 				} else {
 					block.setType(matFloor);

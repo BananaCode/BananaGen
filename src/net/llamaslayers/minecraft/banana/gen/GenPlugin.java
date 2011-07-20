@@ -55,9 +55,6 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		getServer().getLogger().info("[BananaGen] Starting...");
 		instance = this;
 		getServer().getScheduler().scheduleSyncDelayedTask(this, this);
-		getCommand("bananaworld").setExecutor(this);
-		getCommand("bananagen").setExecutor(this);
-		getCommand("bananaregen").setExecutor(this);
 	}
 
 	@Override

@@ -4,11 +4,9 @@ import java.util.Random;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.CreatureType;
@@ -126,21 +124,39 @@ public class DungeonPopulator extends BananaBlockPopulator {
 		};
 
 		block.setType(Material.MOB_SPAWNER);
-		((CreatureSpawner) block.getState()).setCreatureType(types[random.nextInt(types.length)]);
+		BlockState state = block.getState();
+		if (state instanceof CreatureSpawner) {
+			((CreatureSpawner) state).setCreatureType(types[random.nextInt(types.length)]);
+		} else {
+			Bukkit.getServer().getLogger().severe("Spawner is not giving correct state, returned "
+					+ state
+					+ " (block type: "
+					+ block.getType()
+					+ ", state type: " + state.getType() + ")");
+		}
 	}
 
 	private static void placeChest(Random random, Block block) {
 		block.setType(Material.CHEST);
-		Inventory chest = ((Chest) block.getState()).getInventory();
+		BlockState state = block.getState();
+		if (state instanceof Chest) {
+			Inventory chest = ((Chest) state).getInventory();
 
-		for (int i = 0; i < 5; i++) {
-			chest.setItem(random.nextInt(chest.getSize()), getRandomTool(random, i));
-			if (i < 5) {
-				chest.setItem(random.nextInt(chest.getSize()), getRandomArmor(random, i));
+			for (int i = 0; i < 5; i++) {
+				chest.setItem(random.nextInt(chest.getSize()), getRandomTool(random, i));
+				if (i < 5) {
+					chest.setItem(random.nextInt(chest.getSize()), getRandomArmor(random, i));
+				}
 			}
-		}
 
-		chest.setItem(random.nextInt(chest.getSize()), getRandomOre(random));
+			chest.setItem(random.nextInt(chest.getSize()), getRandomOre(random));
+		} else {
+			Bukkit.getServer().getLogger().severe("Chest is not giving correct state, returned "
+					+ state
+					+ " (block type: "
+					+ block.getType()
+					+ ", state type: " + state.getType() + ")");
+		}
 	}
 
 	private static ItemStack getRandomOre(Random random) {
