@@ -147,8 +147,9 @@ public class CavePopulator extends BananaBlockPopulator {
 							Vector position = center.clone().add(new Vector(x, y, z));
 
 							if (center.distanceSquared(position) <= radius2) {
-								if (canPlaceBlock(world, position.getBlockX(), position.getBlockY(), position.getBlockZ())) {
-									world.getBlockAt(position.toLocation(world)).setType(Material.AIR);
+								Block replace = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
+								if (!replace.isEmpty() && !replace.isLiquid()) {
+									replace.setType(Material.AIR);
 								}
 							}
 						}
@@ -156,10 +157,5 @@ public class CavePopulator extends BananaBlockPopulator {
 				}
 			}
 		}
-	}
-
-	private static boolean canPlaceBlock(World world, int x, int y, int z) {
-		Block block = world.getBlockAt(x, y, z);
-		return !block.isLiquid() && !block.isEmpty();
 	}
 }

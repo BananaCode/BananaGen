@@ -32,9 +32,9 @@ public class LakePopulator extends BananaBlockPopulator {
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
 
 		int rx16 = random.nextInt(16);
-		int rx = (source.getX() << 16) + rx16;
+		int rx = (source.getX() << 4) + rx16;
 		int rz16 = random.nextInt(16);
-		int rz = (source.getZ() << 16) + rz16;
+		int rz = (source.getZ() << 4) + rz16;
 		if (snapshot.getHighestBlockYAt(rx16, rz16) < 4)
 			return;
 		int ry = 6 + random.nextInt(snapshot.getHighestBlockYAt(rx16, rz16) - 3);
