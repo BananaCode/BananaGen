@@ -66,21 +66,25 @@ public class BeachGenerator extends BananaChunkGenerator {
 					_y = _y * _y / 4 - 8;
 				}
 
+				boolean nether = getArg(world, "nether");
+				byte sand = (byte) (nether ? Material.SOUL_SAND : Material.SAND).getId();
+				byte sandstone = (byte) (nether ? Material.NETHERRACK
+						: Material.SANDSTONE).getId();
+				byte stone = (byte) (nether ? Material.NETHERRACK
+						: Material.STONE).getId();
+				byte bedrock = (byte) Material.BEDROCK.getId();
 				for (int y = 56 + (int) _y; y > 0; y--) {
 					if (deep < noiseTerrainType.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 3 + 5) {
-						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.SOUL_SAND
-								: Material.SAND).getId();
+						b[x * 2048 + z * 128 + y] = sand;
 					} else if (deep < noiseTerrainType2.noise(x + chunkX, z
 							+ chunkZ, 0.5, 0.5, true) * 4 + 7) {
-						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.NETHERRACK
-								: Material.SANDSTONE).getId();
+						b[x * 2048 + z * 128 + y] = sandstone;
 					} else {
-						b[x * 2048 + z * 128 + y] = (byte) (getArg(world, "nether") ? Material.NETHERRACK
-								: Material.STONE).getId();
+						b[x * 2048 + z * 128 + y] = stone;
 					}
 					deep++;
 				}
-				b[x * 2048 + z * 128] = (byte) Material.BEDROCK.getId();
+				b[x * 2048 + z * 128] = bedrock;
 			}
 		}
 
@@ -100,11 +104,11 @@ public class BeachGenerator extends BananaChunkGenerator {
 		gen.setScale(1 / 128.0);
 		octaves.put("terrainHeight", gen);
 
-		gen = new SimplexOctaveGenerator(seed, 8);
+		gen = new SimplexOctaveGenerator(seed, 4);
 		gen.setScale(1 / 64.0);
 		octaves.put("terrainType", gen);
 
-		gen = new SimplexOctaveGenerator(seed, 8);
+		gen = new SimplexOctaveGenerator(seed, 4);
 		gen.setScale(1 / 32.0);
 		octaves.put("terrainType2", gen);
 	}

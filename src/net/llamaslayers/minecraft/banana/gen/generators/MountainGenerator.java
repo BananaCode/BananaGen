@@ -47,6 +47,13 @@ public class MountainGenerator extends BananaChunkGenerator {
 
 		byte[] b = new byte[32768];
 
+		byte dirt = (byte) Material.DIRT.getId();
+		byte cobblestone = (byte) Material.COBBLESTONE.getId();
+		byte stone = (byte) Material.STONE.getId();
+		byte snow = (byte) Material.SNOW.getId();
+		byte grass = (byte) Material.GRASS.getId();
+		byte bedrock = (byte) Material.BEDROCK.getId();
+
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int deep = 0;
@@ -56,23 +63,23 @@ public class MountainGenerator extends BananaChunkGenerator {
 					double terrainType = noiseTerrainType.noise(x + chunkX, z
 							+ chunkZ, 0.5, 0.5, true)
 							* 5 + y + random.nextDouble() * 10 - 5;
-					Material ground = Material.DIRT;
+					byte ground = dirt;
 					if (terrainType > 30 && deep < random.nextInt(3) + 2) {
-						ground = Material.COBBLESTONE;
+						ground = cobblestone;
 					}
 					if (terrainType > 50 && deep < random.nextInt(3) + 3) {
-						ground = Material.STONE;
+						ground = stone;
 					}
 					if (terrainType > 85 && deep == 0) {
-						ground = Material.SNOW;
+						ground = snow;
 					}
-					if (ground == Material.DIRT && deep == 0) {
-						ground = Material.GRASS;
+					if (ground == dirt && deep == 0) {
+						ground = grass;
 					}
-					b[x * 2048 + z * 128 + y] = (byte) ground.getId();
+					b[x * 2048 + z * 128 + y] = ground;
 					deep++;
 				}
-				b[x * 2048 + z * 128] = (byte) Material.BEDROCK.getId();
+				b[x * 2048 + z * 128] = bedrock;
 			}
 		}
 

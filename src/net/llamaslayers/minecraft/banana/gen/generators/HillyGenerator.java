@@ -57,43 +57,46 @@ public class HillyGenerator extends BananaChunkGenerator {
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
-		Material matMain = getArg(world, "nether") ?
-				Material.NETHERRACK : Material.DIRT;
-		Material matShore = getArg(world, "nether") ?
-				Material.SOUL_SAND : Material.SAND;
-		Material matShore2 = Material.GRAVEL;
-		Material matTop = getArg(world, "nether") ?
-				Material.NETHERRACK : Material.GRASS;
+		boolean nether = getArg(world, "nether");
+		byte matMain = (byte) (nether ? Material.NETHERRACK : Material.DIRT).getId();
+		byte matShore = (byte) (nether ? Material.SOUL_SAND : Material.SAND).getId();
+		byte matShore2 = (byte) Material.GRAVEL.getId();
+		byte matTop = (byte) (nether ? Material.NETHERRACK : Material.GRASS).getId();
 		try {
-			matTop = Material.valueOf(getArgString(world, "groundcover", ""));
+			matTop = (byte) Material.valueOf(getArgString(world, "groundcover", "")).getId();
 		} catch (IllegalArgumentException ex) {
 			// TODO: complain?
 		}
-		Material matUnder = getArg(world, "nether") ?
-				Material.NETHERRACK : Material.STONE;
-		Material matLiquid = getArg(world, "nether") ?
-				Material.STATIONARY_LAVA : Material.STATIONARY_WATER;
+		byte matUnder = (byte) (nether ? Material.NETHERRACK : Material.STONE).getId();
+		byte matLiquid = (byte) (nether ? Material.STATIONARY_LAVA
+				: Material.STATIONARY_WATER).getId();
+		byte bedrock = (byte) Material.BEDROCK.getId();
 
 		byte[] b = new byte[32768];
+
+		int baseHeight = getArgInt(world, "baseheight", 70, 0, 127);
+		double terrainHeight = getArgDouble(world, "terrainheight", 16.0);
+		boolean noDirt = getArg(world, "nodirt");
+		int waterLevel = getArgInt(world, "waterlevel", 64, 0, 127);
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int deep = 0;
-				for (int y = (int) Math.min(getArgInt(world, "baseheight", 70, 0, 127)
+				for (int y = (int) Math.min(baseHeight
 						+ noiseTerrainHeight.noise(x + chunkX, z + chunkZ, 0.7, 0.6, true)
-						* getArgDouble(world, "terrainheight", 16.0), 127); y > 0; y--) {
+						* terrainHeight, 127); y > 0; y--) {
 					double terrainType = noiseTerrainType.noise(x + chunkX, y, z
 							+ chunkZ, 0.5, 0.5, true);
-					Material ground = matTop;
+					byte ground = matTop;
 					if (Math.abs(terrainType) < random.nextDouble() / 3
-							&& !getArg(world, "nodirt")) {
+							&& !noDirt) {
 						ground = matMain;
 					} else if (deep != 0
-							|| y < getArgInt(world, "waterlevel", 64, 0, 127)) {
+							|| y < waterLevel) {
 						ground = matMain;
 					}
 
-					if (Math.abs(y - getArgInt(world, "waterlevel", 64, 0, 127)) < 5) {
+					if (Math.abs(y - waterLevel) < 5) {
 						if (terrainType < random.nextDouble() / 2) {
 							if (terrainType < random.nextDouble() / 4) {
 								ground = matShore;
@@ -107,18 +110,18 @@ public class HillyGenerator extends BananaChunkGenerator {
 						ground = matUnder;
 					}
 
-					b[x * 2048 + z * 128 + y] = (byte) ground.getId();
+					b[x * 2048 + z * 128 + y] = ground;
 					deep++;
 				}
-				b[x * 2048 + z * 128] = (byte) Material.BEDROCK.getId();
+				b[x * 2048 + z * 128] = bedrock;
 			}
 		}
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				for (int y = 0; y < getArgInt(world, "waterlevel", 64, 0, 127); y++) {
+				for (int y = 0; y < waterLevel; y++) {
 					if (b[x * 2048 + z * 128 + y] == 0) {
-						b[x * 2048 + z * 128 + y] = (byte) matLiquid.getId();
+						b[x * 2048 + z * 128 + y] = matLiquid;
 					}
 				}
 			}

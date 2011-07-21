@@ -189,7 +189,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 			return false;
 
 		new WorldRenderer(this, world, sender, x - radius, z - radius, x
-				+ radius, z + radius, 4, 4, 10).start();
+				+ radius, z + radius, 4, 4, 10).enqueue();
 		return true;
 	}
 
