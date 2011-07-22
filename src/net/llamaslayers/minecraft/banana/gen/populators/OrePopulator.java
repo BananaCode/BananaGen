@@ -35,59 +35,25 @@ public class OrePopulator extends BananaBlockPopulator {
 
 		for (int i = 0; i < type.length; i++) {
 			for (int j = 0; j < iterations[i]; j++) {
-				internal(world, random, source.getX() * 16 + random.nextInt(16), random.nextInt(maxHeight[i]), source.getZ()
-						* 16 + random.nextInt(16), amount[i], type[i]);
+				internal(source, random, random.nextInt(16), random.nextInt(maxHeight[i]), random.nextInt(16), amount[i], type[i]);
 			}
 		}
 	}
 
-	private static void internal(World world, Random random, int originX,
+	private static void internal(Chunk source, Random random, int originX,
 		int originY, int originZ, int amount, Material type) {
-		double angle = random.nextDouble() * Math.PI;
-		double x1 = ((originX + 8) + Math.sin(angle) * amount / 8);
-		double x2 = ((originX + 8) - Math.sin(angle) * amount / 8);
-		double z1 = ((originZ + 8) + Math.cos(angle) * amount / 8);
-		double z2 = ((originZ + 8) - Math.cos(angle) * amount / 8);
-		double y1 = (originY + random.nextInt(3) + 2);
-		double y2 = (originY + random.nextInt(3) + 2);
-
-		for (int i = 0; i <= amount; i++) {
-			double seedX = x1 + (x2 - x1) * i / amount;
-			double seedY = y1 + (y2 - y1) * i / amount;
-			double seedZ = z1 + (z2 - z1) * i / amount;
-			double size = ((Math.sin(i * Math.PI / amount) + 1)
-					* random.nextDouble() * amount / 16 + 1) / 2;
-
-			int startX = (int) (seedX - size);
-			int startY = (int) (seedY - size);
-			int startZ = (int) (seedZ - size);
-			int endX = (int) (seedX + size);
-			int endY = (int) (seedY + size);
-			int endZ = (int) (seedZ + size);
-
-			for (int x = startX; x <= endX; x++) {
-				double sizeX = (x + 0.5 - seedX) / size;
-				sizeX *= sizeX;
-
-				if (sizeX < 1) {
-					for (int y = startY; y <= endY; y++) {
-						double sizeY = (y + 0.5 - seedY) / size;
-						sizeY *= sizeY;
-
-						if (sizeX + sizeY < 1) {
-							for (int z = startZ; z <= endZ; z++) {
-								double sizeZ = (z + 0.5 - seedZ) / size;
-								sizeZ *= sizeZ;
-
-								Block block = world.getBlockAt(x, y, z);
-								if (sizeX + sizeY + sizeZ < 1
-										&& block.getType() == Material.STONE) {
-									block.setType(type);
-								}
-							}
-						}
-					}
-				}
+		for (int i = 0; i < amount; i++) {
+			int x = originX + random.nextInt(amount / 2) - amount / 4;
+			int y = originY + random.nextInt(amount / 4) - amount / 8;
+			int z = originZ + random.nextInt(amount / 2) - amount / 4;
+			x &= 0xf;
+			z &= 0xf;
+			if (y > 127 || y < 0) {
+				continue;
+			}
+			Block block = source.getBlock(x, y, z);
+			if (block.getType() == Material.STONE) {
+				block.setType(type);
 			}
 		}
 	}
