@@ -4,3 +4,5 @@
 .externalToolBuilders/*
 target/*
 build.bat
+deploy.bat
+nb*.xml

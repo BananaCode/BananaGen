@@ -14,7 +14,7 @@ import org.bukkit.block.BlockFace;
 /**
  * BlockPopulator that generates giant mushrooms in {@link Biome#TUNDRA tundra}
  * and {@link Biome#TAIGA taiga}, a la Minecraft 1.8.
- * 
+ *
  * @author codename_B
  */
 public class MushroomPopulator extends BananaBlockPopulator {
@@ -24,18 +24,21 @@ public class MushroomPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
-		if (random.nextInt(16) > 0)
+		if (random.nextInt(16) > 0) {
 			return;
+		}
 
 		int rx = 2 + random.nextInt(12);
 		int rz = 2 + random.nextInt(12);
 		Block block = source.getBlock(rx, world.getHighestBlockYAt((source.getX() << 4)
 				+ rx, (source.getZ() << 4) + rz), rz);
-		if (block.getBiome() != Biome.TAIGA && block.getBiome() != Biome.TUNDRA)
+		if (block.getBiome() != Biome.TAIGA && block.getBiome() != Biome.TUNDRA) {
 			return;
+		}
 		if (block.getRelative(BlockFace.DOWN).getType() != Material.GRASS
-				&& block.getRelative(BlockFace.DOWN).getType() != Material.DIRT)
+				&& block.getRelative(BlockFace.DOWN).getType() != Material.DIRT) {
 			return;
+		}
 
 		int size = 2 + random.nextInt(4);
 		for (int i = 0; i <= size + 1; i++) {
@@ -49,7 +52,7 @@ public class MushroomPopulator extends BananaBlockPopulator {
 					for (int z = -size + diff; z <= size - diff; z++) {
 						if (x * x + z * z < (size - diff) * (size - diff)
 								&& (i > size || x * x + z * z + 1 > (size - diffNext)
-										* (size - diffNext))) {
+								* (size - diffNext))) {
 							mushroom.getRelative(x, 0, z).setType(Material.STONE);
 						}
 					}

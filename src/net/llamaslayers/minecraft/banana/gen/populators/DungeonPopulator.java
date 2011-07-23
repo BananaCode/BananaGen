@@ -16,7 +16,7 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 
 /**
  * A BlockPopulator that places dungeons around the map.
- * 
+ *
  * @author codename_B
  */
 public class DungeonPopulator extends BananaBlockPopulator {
@@ -64,7 +64,7 @@ public class DungeonPopulator extends BananaBlockPopulator {
 	}
 
 	private static void generateRoom(int posX, int posY, int posZ, int sizeX,
-		int sizeY, int sizeZ, World world, Random random) {
+									 int sizeY, int sizeZ, World world, Random random) {
 		// Fill with air
 		for (int x = posX; x < posX + sizeX; x++) {
 			for (int y = posY; y < posY + sizeY; y++) {
@@ -119,8 +119,8 @@ public class DungeonPopulator extends BananaBlockPopulator {
 
 	private static void placeSpawner(Random random, Block block) {
 		CreatureType[] types = new CreatureType[] {
-				CreatureType.SKELETON, CreatureType.ZOMBIE,
-				CreatureType.CREEPER, CreatureType.SPIDER
+			CreatureType.SKELETON, CreatureType.ZOMBIE,
+			CreatureType.CREEPER, CreatureType.SPIDER
 		};
 
 		block.setType(Material.MOB_SPAWNER);
@@ -163,65 +163,69 @@ public class DungeonPopulator extends BananaBlockPopulator {
 		int i = random.nextInt(255);
 		int count = random.nextInt(63) + 1;
 
-		if (i > 253)
+		if (i > 253) {
 			return new ItemStack(Material.LAPIS_BLOCK, count);
-		else if (i > 230)
+		} else if (i > 230) {
 			return new ItemStack(Material.DIAMOND_ORE, count);
-		else if (i > 190)
+		} else if (i > 190) {
 			return new ItemStack(Material.GOLD_ORE, count);
-		else if (i > 150)
+		} else if (i > 150) {
 			return new ItemStack(Material.IRON_ORE, count);
-		else
+		} else {
 			return new ItemStack(Material.COAL, count);
+		}
 	}
 
 	private static ItemStack getRandomTool(Random random, int index) {
 		// 0 = sword, 1 = spade, 2 = pickaxe, 3 = axe
 		int i = random.nextInt(255);
 
-		if (i > 245)
-			// Diamond
+		if (i > 245) // Diamond
+		{
 			return new ItemStack(276 + index, 1);
-		else if (i > 230)
-			// Gold
+		} else if (i > 230) // Gold
+		{
 			return new ItemStack(283 + index, 1);
-		else if (i > 190) {
-			if (index == 0)
-				// Iron sword
+		} else if (i > 190) {
+			if (index == 0) // Iron sword
+			{
 				return new ItemStack(267, 1);
+			}
 			// Iron items
 			return new ItemStack(255 + index, 1);
-		} else if (i > 150)
-			// Stone
+		} else if (i > 150) // Stone
+		{
 			return new ItemStack(272 + index, 1);
-		else
-			// Wood
+		} else // Wood
+		{
 			return new ItemStack(268 + index, 1);
+		}
 	}
 
 	private static ItemStack getRandomArmor(Random random, int index) {
 		// 0 = helmet, 1 = chestplate, 2 = leggings, 3 = boots
 		int i = random.nextInt(255);
 
-		if (i > 245)
-			// Diamond
+		if (i > 245) // Diamond
+		{
 			return new ItemStack(310 + index, 1);
-		else if (i > 230)
-			// Chainmail
+		} else if (i > 230) // Chainmail
+		{
 			return new ItemStack(302 + index, 1);
-		else if (i > 190)
-			// Gold
+		} else if (i > 190) // Gold
+		{
 			return new ItemStack(314 + index, 1);
-		else if (i > 150)
-			// Iron
+		} else if (i > 150) // Iron
+		{
 			return new ItemStack(306 + index, 1);
-		else
-			// Leather
+		} else // Leather
+		{
 			return new ItemStack(298 + index, 1);
+		}
 	}
 
 	private static void placeBlock(World world, int x, int y, int z,
-		Material mat) {
+								   Material mat) {
 		if (canPlaceBlock(world, x, y, z)) {
 			world.getBlockAt(x, y, z).setType(mat);
 		}
