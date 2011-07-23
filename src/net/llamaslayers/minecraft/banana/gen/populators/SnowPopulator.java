@@ -5,6 +5,7 @@ import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 
 import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -27,35 +28,39 @@ public class SnowPopulator extends BananaBlockPopulator {
 		if (getArg(world, "nether"))
 			return;
 
+		int chunkX = source.getX() * 16;
+		int chunkZ = source.getZ() * 16;
+		ChunkSnapshot snapshot = source.getChunkSnapshot();
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				Block block = source.getBlock(x, 64, z);
-				if (block.getBiome() != Biome.TAIGA
-						&& block.getBiome() != Biome.TUNDRA) {
+				Biome biome = world.getBiome(x + chunkX, z + chunkZ);
+				if (biome != Biome.TAIGA && biome != Biome.TUNDRA) {
 					continue;
 				}
 
-				for (int y = 126; y >= 4; --y) {
-					block = source.getBlock(x, y, z);
-					if (block.getType() == Material.WATER
-							|| block.getType() == Material.STATIONARY_WATER) {
-						if (block.getData() == 0) {
-							block.setType(Material.ICE);
-						}
-						break;
-					} else if (block.getType() == Material.LAVA
-							|| block.getType() == Material.STATIONARY_LAVA) {
-						break;
-					} else if (block.getType() != Material.AIR) {
-						block.getRelative(BlockFace.UP).setType(Material.SNOW);
-						if (block.getType() == Material.DIRT) {
-							block.setType(Material.GRASS);
-						}
-						break;
+				int y = snapshot.getHighestBlockYAt(x, z);
+				if (source.getBlock(x, y, z).getType() == Material.AIR) {
+					y--;
+				}
+
+				Block block = source.getBlock(x, y, z);
+				switch (block.getType()) {
+				case WATER:
+				case STATIONARY_WATER:
+					if (block.getData() == 0) {
+						block.setType(Material.ICE);
 					}
+					break;
+				case LAVA:
+				case STATIONARY_LAVA:
+					break;
+				case DIRT:
+					block.setType(Material.GRASS);
+				default:
+					block.getRelative(BlockFace.UP).setType(Material.SNOW);
+					break;
 				}
 			}
 		}
 	}
-
 }

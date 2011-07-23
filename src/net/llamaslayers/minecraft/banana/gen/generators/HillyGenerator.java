@@ -51,8 +51,9 @@ public class HillyGenerator extends BananaChunkGenerator {
 	@Override
 	public byte[] generate(World world, Random random, int chunkX, int chunkZ) {
 		Map<String, OctaveGenerator> octaves = getWorldOctaves(world);
-		OctaveGenerator noiseTerrainHeight = octaves.get("terrainHeight");
-		OctaveGenerator noiseTerrainType = octaves.get("terrainType");
+		OctaveGenerator noiseHeight = octaves.get("height");
+		OctaveGenerator noiseJitter = octaves.get("jitter");
+		OctaveGenerator noiseType = octaves.get("type");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
@@ -83,10 +84,12 @@ public class HillyGenerator extends BananaChunkGenerator {
 			for (int z = 0; z < 16; z++) {
 				int deep = 0;
 				for (int y = (int) Math.min(baseHeight
-						+ noiseTerrainHeight.noise(x + chunkX, z + chunkZ, 0.7, 0.6, true)
-						* terrainHeight, 127); y > 0; y--) {
-					double terrainType = noiseTerrainType.noise(x + chunkX, y, z
-							+ chunkZ, 0.5, 0.5, true);
+						+ noiseHeight.noise(x + chunkX, z + chunkZ, 0.7, 0.6, true)
+						* terrainHeight
+						+ noiseJitter.noise(x + chunkX, z + chunkZ, 0.5, 0.5)
+						* 1.5, 127); y > 0; y--) {
+					double terrainType = noiseType.noise(x + chunkX, y, z
+							+ chunkZ, 0.5, 0.5);
 					byte ground = matTop;
 					if (Math.abs(terrainType) < random.nextDouble() / 3
 							&& !noDirt) {
@@ -96,7 +99,8 @@ public class HillyGenerator extends BananaChunkGenerator {
 						ground = matMain;
 					}
 
-					if (Math.abs(y - waterLevel) < 5) {
+					if (Math.abs(y - waterLevel) < 5 - random.nextInt(2)
+							&& deep < 7) {
 						if (terrainType < random.nextDouble() / 2) {
 							if (terrainType < random.nextDouble() / 4) {
 								ground = matShore;
@@ -139,12 +143,22 @@ public class HillyGenerator extends BananaChunkGenerator {
 		Map<String, OctaveGenerator> octaves) {
 		Random seed = new Random(world.getSeed());
 
-		OctaveGenerator gen = new SimplexOctaveGenerator(seed, 5);
+		/* With default settings, this is 5 octaves. With tscale=256,terrainheight=50,
+		 * this comes out to 14 octaves, which makes more complex terrain at the cost
+		 * of more complex generation. Without this, the terrain looks bad, especially
+		 * on higher tscale/terrainheight pairs. */
+		OctaveGenerator gen = new SimplexOctaveGenerator(seed, Math.max((int) Math.round(Math.sqrt(50
+				* getArgDouble(world, "tscale", 64.0)
+				/ (128 - getArgDouble(world, "terrainheight", 16.0))) * 1.1 - 0.2), 5));
 		gen.setScale(1 / getArgDouble(world, "tscale", 64.0));
-		octaves.put("terrainHeight", gen);
+		octaves.put("height", gen);
+
+		gen = new SimplexOctaveGenerator(seed, gen.getOctaves().length / 2);
+		gen.setScale(Math.min(getArgDouble(world, "tscale", 64.0) / 1024, 1 / 32.0));
+		octaves.put("jitter", gen);
 
 		gen = new SimplexOctaveGenerator(seed, 2);
 		gen.setScale(1 / 128.0);
-		octaves.put("terrainType", gen);
+		octaves.put("type", gen);
 	}
 }

@@ -1,8 +1,8 @@
 package net.llamaslayers.minecraft.banana.gen.populators;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.GenPlugin;
@@ -12,8 +12,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.util.BlockVector;
-import org.bukkit.util.Vector;
 
 /**
  * BlockPopulator for snake-based caves.
@@ -23,13 +21,11 @@ import org.bukkit.util.Vector;
 public class CavePopulator extends BananaBlockPopulator {
 	static class FinishSnake implements Runnable {
 		private final World world;
-		private final Random random;
-		private final List<BlockVector> snake;
+		private final XYZ[] snake;
 
-		public FinishSnake(World world, Random random, List<BlockVector> snake) {
+		public FinishSnake(World world, Set<XYZ> snake) {
 			this.world = world;
-			this.random = random;
-			this.snake = snake;
+			this.snake = snake.toArray(new XYZ[0]);
 		}
 
 		/**
@@ -37,11 +33,58 @@ public class CavePopulator extends BananaBlockPopulator {
 		 */
 		@Override
 		public void run() {
-			finishSnake(world, random, snake);
+			finishSnake(world, snake);
+			for (XYZ block : snake) {
+				world.unloadChunkRequest(block.x / 16, block.z / 16);
+			}
 		}
 	}
 
-	static boolean isGenerating = false;
+	/**
+	 * Used for fast storage, comparison, and recall of block positions. Mutable
+	 * to avoid creating new objects for simple comparison.
+	 * 
+	 * @author Nightgunner5
+	 */
+	static class XYZ {
+		int x;
+		int y;
+		int z;
+
+		/**
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + x;
+			result = prime * result + y;
+			result = prime * result + z;
+			return result;
+		}
+
+		/**
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (!(obj instanceof XYZ))
+				return false;
+			XYZ other = (XYZ) obj;
+			if (x != other.x)
+				return false;
+			if (y != other.y)
+				return false;
+			if (z != other.z)
+				return false;
+			return true;
+		}
+	}
 
 	/**
 	 * @see org.bukkit.generator.BlockPopulator#populate(org.bukkit.World,
@@ -49,46 +92,43 @@ public class CavePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(final World world, final Random random, Chunk source) {
-		if (isGenerating)
-			return;
-		if (random.nextInt(16) > 1)
-			return;
+		if (random.nextInt(100) < 10) {
+			final int x = 4 + random.nextInt(8) + source.getX() * 16;
+			final int z = 4 + random.nextInt(8) + source.getZ() * 16;
+			int maxY = world.getHighestBlockYAt(x, z);
+			if (maxY < 16) {
+				maxY = 32;
+			}
 
-		final int x = 4 + random.nextInt(8) + source.getX() * 16;
-		final int z = 4 + random.nextInt(8) + source.getZ() * 16;
-		int maxY = world.getHighestBlockYAt(x, z);
-		if (maxY < 16) {
-			maxY = 32;
-		}
+			final int y = random.nextInt(maxY);
+			new Thread() {
+				@Override
+				public void run() {
+					Set<XYZ> snake = startSnake(world, random, x, y, z);
+					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, snake));
 
-		final int y = random.nextInt(maxY);
-		new Thread() {
-			@Override
-			public void run() {
-				isGenerating = true;
-				List<BlockVector> snake = startSnake(world, random, x, y, z);
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, random, snake));
-
-				if (random.nextInt(16) > 5) {
-					if (y > 36) {
-						snake = startSnake(world, random, x, y / 2, z);
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, random, snake));
-					} else if (y < 24) {
-						snake = startSnake(world, random, x, y * 2, z);
-						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, random, snake));
+					if (random.nextInt(16) > 5) {
+						if (y > 36) {
+							snake = startSnake(world, random, x, y / 2, z);
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, snake));
+						} else if (y < 24) {
+							snake = startSnake(world, random, x, y * 2, z);
+							Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(GenPlugin.instance, new FinishSnake(world, snake));
+						}
 					}
 				}
-				isGenerating = false;
-			}
-		}.start();
+			}.start();
+		}
 	}
 
-	static List<BlockVector> startSnake(World world, Random random,
-		int blockX, int blockY, int blockZ) {
-		List<BlockVector> snakeBlocks = new ArrayList<BlockVector>();
+	static Set<XYZ> startSnake(World world, Random random, int blockX,
+		int blockY, int blockZ) {
+		Set<XYZ> snakeBlocks = new HashSet<XYZ>();
 
-		while (world.getBlockTypeIdAt(blockX, blockY, blockZ) != 0) {
-			if (snakeBlocks.size() > 2000) {
+		int airHits = 0;
+		XYZ block = new XYZ();
+		while (true) {
+			if (airHits > 2000) {
 				break;
 			}
 
@@ -127,34 +167,42 @@ public class CavePopulator extends BananaBlockPopulator {
 			}
 
 			if (world.getBlockTypeIdAt(blockX, blockY, blockZ) != 0) {
-				snakeBlocks.add(new BlockVector(blockX, blockY, blockZ));
+				int radius = 1 + random.nextInt(3);
+				int radius2 = radius * radius + 1;
+				for (int x = -radius; x <= radius; x++) {
+					for (int y = -radius; y <= radius; y++) {
+						for (int z = -radius; z <= radius; z++) {
+							if (x * x + y * y + z * z <= radius2 && y >= 0
+									&& y < 128) {
+								if (world.getBlockTypeIdAt(blockX + x, blockY
+										+ y, blockZ + z) == 0) {
+									airHits++;
+								} else {
+									block.x = blockX + x;
+									block.y = blockY + y;
+									block.z = blockZ + z;
+									if (snakeBlocks.add(block)) {
+										block = new XYZ();
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				airHits++;
 			}
 		}
 
 		return snakeBlocks;
 	}
 
-	static void finishSnake(World world, Random random,
-		List<BlockVector> snakeBlocks) {
-		for (BlockVector center : snakeBlocks) {
-			Block block = world.getBlockAt(center.toLocation(world));
-			if (block.getType() != Material.AIR) {
-				int radius = 1 + random.nextInt(3);
-				int radius2 = radius * radius + 1;
-				for (int x = -radius; x <= radius; x++) {
-					for (int y = -radius; y <= radius; y++) {
-						for (int z = -radius; z <= radius; z++) {
-							Vector position = center.clone().add(new Vector(x, y, z));
-
-							if (center.distanceSquared(position) <= radius2) {
-								Block replace = world.getBlockAt(position.getBlockX(), position.getBlockY(), position.getBlockZ());
-								if (!replace.isEmpty() && !replace.isLiquid()) {
-									replace.setType(Material.AIR);
-								}
-							}
-						}
-					}
-				}
+	static void finishSnake(World world, XYZ[] snakeBlocks) {
+		for (XYZ loc : snakeBlocks) {
+			Block block = world.getBlockAt(loc.x, loc.y, loc.z);
+			if (!block.isEmpty() && !block.isLiquid()
+					&& block.getType() != Material.BEDROCK) {
+				block.setType(Material.AIR);
 			}
 		}
 	}

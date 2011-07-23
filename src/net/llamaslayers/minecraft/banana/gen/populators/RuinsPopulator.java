@@ -31,7 +31,8 @@ public class RuinsPopulator extends BananaBlockPopulator {
 	public void populate(World world, Random random, Chunk source) {
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
 		int ruins = 0;
-		while (random.nextInt(100) < RUINS_CHANCE && ruins < MAX_RUINS) {
+		while (random.nextInt(100) < RUINS_CHANCE
+				&& ruins < MAX_RUINS) {
 			int startX = random.nextInt(14) + 1;
 			int startZ = random.nextInt(14) + 1;
 			int startY = snapshot.getHighestBlockYAt(startX, startZ);
@@ -39,6 +40,11 @@ public class RuinsPopulator extends BananaBlockPopulator {
 
 			BlockFace direction1 = directions[random.nextInt(directions.length)];
 			BlockFace direction2 = directions[random.nextInt(directions.length)];
+
+			if (source.getBlock(startX, startY - 1, startZ).isLiquid()) {
+				ruins++;
+				continue;
+			}
 
 			int height = startHeight;
 			int x = startX;
