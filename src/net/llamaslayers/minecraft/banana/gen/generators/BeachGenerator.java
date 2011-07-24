@@ -47,7 +47,7 @@ public class BeachGenerator extends BananaChunkGenerator {
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
-		byte[] b = new byte[272 * world.getMaxHeight()];
+		byte[] b = new byte[272 * 128];
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {

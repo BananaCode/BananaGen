@@ -6,11 +6,13 @@ import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.UndergroundGenerator;
+import net.llamaslayers.minecraft.banana.gen.populators.GlowstonePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.LavaLightFixPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.util.noise.OctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -20,9 +22,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 @Args({"nopopulate", "nether", "torch_max", "torch_chance"})
 public class SubterranianGenerator extends BananaChunkGenerator implements UndergroundGenerator {
 	{
-		populators = Arrays.asList(
-				new LavaLightFixPopulator().setDefault(this),
-				new OrePopulator().setDefault(this));
+		populators = Arrays.asList(new OrePopulator().setDefault(this), new GlowstonePopulator().setDefault(this));
 	}
 
 	@Override
@@ -81,8 +81,8 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 		byte air = (byte) Material.AIR.getId();
 		byte bedrock = (byte) Material.BEDROCK.getId();
 		byte stone = (byte) (nether ? Material.NETHERRACK : Material.STONE).getId();
-		byte lava = (byte) Material.STATIONARY_LAVA.getId();
-		int height = world.getMaxHeight();
+		byte lava = (byte) Material.LAVA.getId();
+		int height = 128;
 
 		byte[] b = new byte[272 * height];
 		Arrays.fill(b, stone);
@@ -152,7 +152,7 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 	public Location getFixedSpawnLocation(World world, Random random) {
 		while (true) {
 			int x = random.nextInt(128) - 64;
-			int y = world.getMaxHeight() * 3 / 4;
+			int y = 128 * 3 / 4;
 			int z = random.nextInt(128) - 64;
 
 			if (world.getBlockAt(x, y, z).isEmpty()) {

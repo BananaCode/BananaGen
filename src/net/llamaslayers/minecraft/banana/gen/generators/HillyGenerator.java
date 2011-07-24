@@ -73,7 +73,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 				: Material.STATIONARY_WATER).getId();
 		byte bedrock = (byte) Material.BEDROCK.getId();
 
-		byte[] b = new byte[272 * world.getMaxHeight()];
+		byte[] b = new byte[272 * 128];
 
 		int baseHeight = getArgInt(world, "baseheight", 70, 0, 127);
 		double terrainHeight = getArgDouble(world, "terrainheight", 16.0);

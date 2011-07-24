@@ -45,7 +45,7 @@ public class MountainGenerator extends BananaChunkGenerator {
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
-		byte[] b = new byte[272 * world.getMaxHeight()];
+		byte[] b = new byte[272 * 128];
 
 		byte dirt = (byte) Material.DIRT.getId();
 		byte cobblestone = (byte) Material.COBBLESTONE.getId();
