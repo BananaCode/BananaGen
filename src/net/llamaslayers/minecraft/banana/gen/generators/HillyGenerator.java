@@ -15,7 +15,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 /**
  * Basic generator with lots of hills
- * 
+ *
  * @author Nightgunner5
  */
 @Args({ "nopopulate", "nether", "groundcover", "baseheight", "tscale",
@@ -73,7 +73,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 				: Material.STATIONARY_WATER).getId();
 		byte bedrock = (byte) Material.BEDROCK.getId();
 
-		byte[] b = new byte[32768];
+		byte[] b = new byte[272 * world.getMaxHeight()];
 
 		int baseHeight = getArgInt(world, "baseheight", 70, 0, 127);
 		double terrainHeight = getArgDouble(world, "terrainheight", 16.0);

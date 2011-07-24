@@ -10,6 +10,7 @@ import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.W
 import net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.HillyGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator;
+import net.llamaslayers.minecraft.banana.gen.generators.SubterranianGenerator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -42,6 +43,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		generators.put("hilly", new HillyGenerator());
 		generators.put("mountains", new MountainGenerator());
 		generators.put("beach", new BeachGenerator());
+		generators.put("subterranian", new SubterranianGenerator());
 	}
 
 	@Override

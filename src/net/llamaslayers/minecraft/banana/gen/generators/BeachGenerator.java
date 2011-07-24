@@ -1,6 +1,3 @@
-/**
- * 
- */
 package net.llamaslayers.minecraft.banana.gen.generators;
 
 import java.util.Arrays;
@@ -22,7 +19,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 /**
  * A generator that makes beach-like worlds, as suggested on
  * <a href="http://forums.bukkit.org/threads/23014/">the Bukkit forums</a>
- * 
+ *
  * @author Nightgunner5
  */
 @Args({ "nopopulate", "nether" })
@@ -50,7 +47,7 @@ public class BeachGenerator extends BananaChunkGenerator {
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
-		byte[] b = new byte[32768];
+		byte[] b = new byte[272 * world.getMaxHeight()];
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
