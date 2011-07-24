@@ -16,7 +16,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 /**
  * @author Nightgunner5
  */
-@Args({ "nopopulate", "nether", "torch_max", "torch_chance" })
+@Args({"nopopulate", "nether", "torch_max", "torch_chance"})
 public class SubterranianGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(
@@ -51,6 +51,10 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 		gen = new SimplexOctaveGenerator(seed, 10);
 		gen.setScale(1 / 48.0);
 		octaves.put("stalagmite", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 7);
+		gen.setScale(1 / 32.0);
+		octaves.put("platform", gen);
 	}
 
 	@Override
@@ -62,27 +66,27 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 		OctaveGenerator noiseJitter2 = octaves.get("jitter2");
 		OctaveGenerator noiseStalactite = octaves.get("stalactite");
 		OctaveGenerator noiseStalagmite = octaves.get("stalagmite");
+		OctaveGenerator noisePlatform = octaves.get("platform");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
 		byte air = (byte) Material.AIR.getId();
 		byte bedrock = (byte) Material.BEDROCK.getId();
+		byte stone = (byte) Material.STONE.getId();
 		int height = world.getMaxHeight();
 
 		byte[] b = new byte[272 * height];
-		Arrays.fill(b, (byte) Material.STONE.getId());
+		Arrays.fill(b, stone);
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int min = (int) (Math.abs(noiseFloor.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 3)
 						+ 3 + noiseJitter1.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2
-						+ Math.max(noiseStalagmite.noise(x + chunkX, z + chunkZ, 0.5, 0.5)
-						* height - height / 2, 0));
+						+ convertPointyThings(noiseStalagmite, x + chunkX, z + chunkZ, height));
 				int max = (int) (height - Math.abs(noiseCeiling.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 3)
 						- 3 + noiseJitter2.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2
-						- Math.max(noiseStalactite.noise(x + chunkX, z + chunkZ, 0.5, 0.5)
-						* height - height / 2, 0));
+						- convertPointyThings(noiseStalactite, x + chunkX, z + chunkZ, height));
 
 				if (min >= max) {
 					b[(x * 16 + z) * height] = bedrock;
@@ -94,12 +98,21 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 					b[(x * 16 + z) * height + y] = air;
 				}
 
+				int platform = (int) (noisePlatform.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 10 - 3);
+				while (platform-- >= 0) {
+					b[(x * 16 + z) * height + height / 2 - platform - 2] = stone;
+				}
+
 				b[(x * 16 + z) * height] = bedrock;
 				b[(x * 16 + z) * height + height - 1] = bedrock;
 			}
 		}
 
 		return b;
+	}
+
+	private double convertPointyThings(OctaveGenerator noise, int x, int z, int height) {
+		return Math.max(noise.noise(x, z, 0.5, 0.5, true) * height * 3 / 2 - height / 2, 0);
 	}
 
 	@Override
@@ -111,7 +124,7 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 	public Location getFixedSpawnLocation(World world, Random random) {
 		while (true) {
 			int x = random.nextInt(128) - 64;
-			int y = world.getMaxHeight() / 2;
+			int y = world.getMaxHeight() * 3 / 4;
 			int z = random.nextInt(128) - 64;
 
 			if (world.getBlockAt(x, y, z).isEmpty()) {
