@@ -82,11 +82,9 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 						String generator = bukkitYML.getString(
 								"worlds." + world + ".generator");
 						// Get the new args into the cache even if the world is already loaded
-						getDefaultWorldGenerator(world, generator.substring(generator.indexOf(':') + 1));
+						ChunkGenerator theGenerator = getDefaultWorldGenerator(world, generator.substring(generator.indexOf(':') + 1));
 						if (getServer().getWorld(world) == null) {
-							getServer().createWorld(world,
-									Environment.NORMAL, getDefaultWorldGenerator(world,
-											generator.substring(generator.indexOf(':') + 1)));
+							getServer().createWorld(world, theGenerator instanceof UndergroundGenerator ? Environment.NETHER : Environment.NORMAL, theGenerator);
 						}
 					}
 				}
@@ -128,9 +126,8 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 				return true;
 			}
 		}
-		Permission worldPerm = new Permission("bananagen.world.to."
-				+ world.getName(), PermissionDefault.OP);
-		if (!sender.hasPermission(worldPerm)) {
+		if (!sender.hasPermission("bananagen.world.to.*") && !sender.hasPermission("bananagen.world.to."
+				+ world.getName())) {
 			sender.sendMessage(ChatColor.RED
 					+ "You do not have permission to do that.");
 			return true;

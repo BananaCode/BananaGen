@@ -5,8 +5,9 @@ import java.util.Map;
 import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
+import net.llamaslayers.minecraft.banana.gen.UndergroundGenerator;
+import net.llamaslayers.minecraft.banana.gen.populators.LavaLightFixPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.TorchPopulator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,11 +18,11 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
  * @author Nightgunner5
  */
 @Args({"nopopulate", "nether", "torch_max", "torch_chance"})
-public class SubterranianGenerator extends BananaChunkGenerator {
+public class SubterranianGenerator extends BananaChunkGenerator implements UndergroundGenerator {
 	{
 		populators = Arrays.asList(
-				new OrePopulator().setDefault(this),
-				new TorchPopulator().setDefault(this));
+				new LavaLightFixPopulator().setDefault(this),
+				new OrePopulator().setDefault(this));
 	}
 
 	@Override
@@ -54,7 +55,11 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 
 		gen = new SimplexOctaveGenerator(seed, 7);
 		gen.setScale(1 / 32.0);
-		octaves.put("platform", gen);
+		octaves.put("platform1", gen);
+
+		gen = new SimplexOctaveGenerator(seed, 8);
+		gen.setScale(1 / 96.0);
+		octaves.put("platform2", gen);
 	}
 
 	@Override
@@ -66,7 +71,8 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 		OctaveGenerator noiseJitter2 = octaves.get("jitter2");
 		OctaveGenerator noiseStalactite = octaves.get("stalactite");
 		OctaveGenerator noiseStalagmite = octaves.get("stalagmite");
-		OctaveGenerator noisePlatform = octaves.get("platform");
+		OctaveGenerator noisePlatform1 = octaves.get("platform");
+		OctaveGenerator noisePlatform2 = octaves.get("platform2");
 
 		chunkX <<= 4;
 		chunkZ <<= 4;
@@ -104,12 +110,20 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 					b[(x * 16 + z) * height + y] = air;
 				}
 
-				int platform = (int) (noisePlatform.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 20 - 4);
+				int platform = (int) (noisePlatform1.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 20 - 4);
 				if (platform > 5) {
 					platform -= random.nextInt(3);
 				}
 				while (platform-- > 0) {
 					b[(x * 16 + z) * height + height / 2 - platform - 1] = stone;
+				}
+
+				platform = (int) (noisePlatform2.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 30 - 6);
+				if (platform > 5) {
+					platform -= random.nextInt(3);
+				}
+				while (platform-- > 0) {
+					b[(x * 16 + z) * height + height / 4 - platform - 1] = stone;
 				}
 
 				for (int i = 4; i > 0; i--) {

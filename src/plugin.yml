@@ -19,6 +19,8 @@ permissions:
         default: true
     bananagen.world.other:
         default: op
+    bananagen.world.to.*:
+        default: op
     bananagen.generate:
         default: op
     bananagen.regenerate:
