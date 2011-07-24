@@ -76,6 +76,15 @@
 					<include>**/*.bo2</include>
 				</includes>
 			</resource>
+			<resource>
+				<!-- Hack to include sources in bin jar -->
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
 		</resources>
 
 		<testResources>

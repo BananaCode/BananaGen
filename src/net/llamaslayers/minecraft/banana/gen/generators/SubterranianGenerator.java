@@ -71,9 +71,11 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 		chunkX <<= 4;
 		chunkZ <<= 4;
 
+		boolean nether = getArg(world, "nether");
 		byte air = (byte) Material.AIR.getId();
 		byte bedrock = (byte) Material.BEDROCK.getId();
-		byte stone = (byte) Material.STONE.getId();
+		byte stone = (byte) (nether ? Material.NETHERRACK : Material.STONE).getId();
+		byte lava = (byte) Material.STATIONARY_LAVA.getId();
 		int height = world.getMaxHeight();
 
 		byte[] b = new byte[272 * height];
@@ -82,11 +84,15 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int min = (int) (Math.abs(noiseFloor.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 3)
-						+ 3 + noiseJitter1.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2
+						+ 5 + noiseJitter1.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2
 						+ convertPointyThings(noiseStalagmite, x + chunkX, z + chunkZ, height));
 				int max = (int) (height - Math.abs(noiseCeiling.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 3)
-						- 3 + noiseJitter2.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2
+						- 5 + noiseJitter2.noise(x + chunkX, z + chunkZ, 0.5, 0.5) * 2 - random.nextInt(5)
 						- convertPointyThings(noiseStalactite, x + chunkX, z + chunkZ, height));
+
+				if (min > 20) {
+					min -= random.nextInt(5);
+				}
 
 				if (min >= max) {
 					b[(x * 16 + z) * height] = bedrock;
@@ -98,11 +104,19 @@ public class SubterranianGenerator extends BananaChunkGenerator {
 					b[(x * 16 + z) * height + y] = air;
 				}
 
-				int platform = (int) (noisePlatform.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 10 - 3);
-				while (platform-- >= 0) {
-					b[(x * 16 + z) * height + height / 2 - platform - 2] = stone;
+				int platform = (int) (noisePlatform.noise(x + chunkX, z + chunkZ, 0.5, 0.5, true) * 20 - 4);
+				if (platform > 5) {
+					platform -= random.nextInt(3);
+				}
+				while (platform-- > 0) {
+					b[(x * 16 + z) * height + height / 2 - platform - 1] = stone;
 				}
 
+				for (int i = 4; i > 0; i--) {
+					if (b[(x * 16 + z) * height + i] == air) {
+						b[(x * 16 + z) * height + i] = lava;
+					}
+				}
 				b[(x * 16 + z) * height] = bedrock;
 				b[(x * 16 + z) * height + height - 1] = bedrock;
 			}
