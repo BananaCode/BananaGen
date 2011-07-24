@@ -71,7 +71,7 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 		OctaveGenerator noiseJitter2 = octaves.get("jitter2");
 		OctaveGenerator noiseStalactite = octaves.get("stalactite");
 		OctaveGenerator noiseStalagmite = octaves.get("stalagmite");
-		OctaveGenerator noisePlatform1 = octaves.get("platform");
+		OctaveGenerator noisePlatform1 = octaves.get("platform1");
 		OctaveGenerator noisePlatform2 = octaves.get("platform2");
 
 		chunkX <<= 4;
