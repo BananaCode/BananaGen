@@ -7,12 +7,10 @@ import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.UndergroundGenerator;
 import net.llamaslayers.minecraft.banana.gen.populators.GlowstonePopulator;
-import net.llamaslayers.minecraft.banana.gen.populators.LavaLightFixPopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.util.noise.OctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
@@ -22,7 +20,9 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 @Args({"nopopulate", "nether", "torch_max", "torch_chance"})
 public class SubterranianGenerator extends BananaChunkGenerator implements UndergroundGenerator {
 	{
-		populators = Arrays.asList(new OrePopulator().setDefault(this), new GlowstonePopulator().setDefault(this));
+		populators = Arrays.asList(
+				new OrePopulator().setDefault(this),
+				new GlowstonePopulator().setDefault(this));
 	}
 
 	@Override

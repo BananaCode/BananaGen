@@ -6,6 +6,7 @@ import java.util.Set;
 
 import net.llamaslayers.minecraft.banana.gen.BananaBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.GenPlugin;
+import net.llamaslayers.minecraft.banana.gen.XYZ;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -15,7 +16,7 @@ import org.bukkit.block.Block;
 
 /**
  * BlockPopulator for snake-based caves.
- * 
+ *
  * @author Pandarr
  */
 public class CavePopulator extends BananaBlockPopulator {
@@ -37,52 +38,6 @@ public class CavePopulator extends BananaBlockPopulator {
 			for (XYZ block : snake) {
 				world.unloadChunkRequest(block.x / 16, block.z / 16);
 			}
-		}
-	}
-
-	/**
-	 * Used for fast storage, comparison, and recall of block positions. Mutable
-	 * to avoid creating new objects for simple comparison.
-	 * 
-	 * @author Nightgunner5
-	 */
-	static class XYZ {
-		int x;
-		int y;
-		int z;
-
-		/**
-		 * @see java.lang.Object#hashCode()
-		 */
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + x;
-			result = prime * result + y;
-			result = prime * result + z;
-			return result;
-		}
-
-		/**
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (!(obj instanceof XYZ))
-				return false;
-			XYZ other = (XYZ) obj;
-			if (x != other.x)
-				return false;
-			if (y != other.y)
-				return false;
-			if (z != other.z)
-				return false;
-			return true;
 		}
 	}
 

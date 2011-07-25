@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package net.llamaslayers.minecraft.banana.gen.populators;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -27,7 +28,7 @@ import org.bukkit.block.BlockFace;
  * Populates using BO2 files. An editor is available at <a
  * href="http://faskerstudio.com/minecraft/BBOB/"
  * >http://faskerstudio.com/minecraft/BBOB/</a>
- * 
+ *
  * @author Nightgunner5
  */
 public abstract class BuildingPopulator extends BananaBlockPopulator {
@@ -46,7 +47,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		try {
 			URLClassLoader classLoader = (URLClassLoader) getClass().getClassLoader();
 			URL jarUrl = classLoader.getURLs()[0];
-			jar = new JarFile(jarUrl.toString().replace("file:/", "").replace("%20", " "));
+			jar = new JarFile(jarUrl.toString().replace("file:/", File.separator).replace("%20", " "));
 			schematics = jar.entries();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -84,7 +85,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 	/**
 	 * Returns this populator's building list
-	 * 
+	 *
 	 * @return All buildings
 	 */
 	protected List<Building> getAllBuildings() {
@@ -93,7 +94,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 	/**
 	 * Returns a random building
-	 * 
+	 *
 	 * @param random
 	 *            A random number generator to be used in calculations
 	 * @return One random building or null if there are none to choose from
@@ -101,15 +102,16 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 	protected Building getAnyBuilding(Random random) {
 		List<Building> acceptable = getAllBuildings();
 
-		if (acceptable.size() == 0)
+		if (acceptable.size() == 0) {
 			return null;
+		}
 
 		return acceptable.get(random.nextInt(acceptable.size()));
 	}
 
 	/**
 	 * Returns a list of buildings that could be placed at the given block
-	 * 
+	 *
 	 * @param seed
 	 *            The block where location 0, 0, 0 would be
 	 * @return All buildings that could be placed at the given block
@@ -127,7 +129,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 	/**
 	 * Returns a random building that could be placed at the given block
-	 * 
+	 *
 	 * @param seed
 	 *            The block where location 0, 0, 0 would be
 	 * @param random
@@ -137,8 +139,9 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 	protected Building getRandomBuilding(Block seed, Random random) {
 		List<Building> acceptable = getPossibleBuildings(seed);
 
-		if (acceptable.size() == 0)
+		if (acceptable.size() == 0) {
 			return null;
+		}
 
 		return acceptable.get(random.nextInt(acceptable.size()));
 	}
@@ -152,7 +155,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 	/**
 	 * A parsed .bo2 file
-	 * 
+	 *
 	 * @author Nightgunner5
 	 */
 	protected class Building {
@@ -224,10 +227,12 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		}
 
 		boolean parseLine(String line) {
-			if (line == null)
+			if (line == null) {
 				return false;
-			if (line.trim().length() == 0)
+			}
+			if (line.trim().length() == 0) {
 				return true;
+			}
 
 			if (line.equals("[META]")) {
 				section = META;
@@ -243,16 +248,18 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 				String value = parts[1].toLowerCase();
 
 				if (key.equals("version")) {
-					if (!value.equals("2.0"))
+					if (!value.equals("2.0")) {
 						throw new RuntimeException("In " + name
 								+ ".bo2: Expecting version 2.0; got version "
 								+ value);
+					}
 					return true;
 				}
 				if (key.equals("spawninbiome")) {
-					if (biomes != null)
+					if (biomes != null) {
 						throw new RuntimeException("In " + name
 								+ ".bo2: multiple spawninbiome declarations");
+					}
 					if (value.equals("all")) {
 						biomes = Biome.values();
 					} else {
@@ -302,12 +309,15 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 					dig = Boolean.parseBoolean(value);
 					return true;
 				}
-				if (key.equals("tree"))
+				if (key.equals("tree")) {
 					return true; // TODO, currently unsupported
-				if (key.equals("branch"))
+				}
+				if (key.equals("branch")) {
 					return true; // TODO, currently unsupported
-				if (key.equals("diggingbranch"))
+				}
+				if (key.equals("diggingbranch")) {
 					return true; // TODO, currently unsupported
+				}
 				if (key.equals("needsfoundation")) {
 					needsFoundation = Boolean.parseBoolean(value);
 					return true;
@@ -336,10 +346,12 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 				if (key.equals("groupfrequencymin")
 						|| key.equals("groupfrequencymax")
 						|| key.equals("groupseperationmin")
-						|| key.equals("groupseperationmax"))
+						|| key.equals("groupseperationmax")) {
 					return true; // TODO, currently unsupported
-				if (key.equals("branchlimit"))
+				}
+				if (key.equals("branchlimit")) {
 					return true; // TODO, currently unsupported
+				}
 			}
 			if (section == DATA) {
 				try {
@@ -373,82 +385,93 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 		/**
 		 * Determine if this building can be placed on a given block
-		 * 
+		 *
 		 * @param block
 		 *            The block where location 0, 0, 0 would be
 		 * @return true if the building can be placed, false if it cannot
 		 */
 		public boolean canPlaceOn(Block block) {
-			if (block.getY() > heightMax || block.getY() < heightMin)
-				//debug("Start Y out of range");
+			if (block.getY() > heightMax || block.getY() < heightMin) //debug("Start Y out of range");
+			{
 				return false;
-			if (block.getY() + maxY > 127 || block.getY() + minY < 0)
-				//debug("End Y out of range");
+			}
+			if (block.getY() + maxY > 127 || block.getY() + minY < 0) //debug("End Y out of range");
+			{
 				return false;
+			}
 
 			if (spawnBlockType != null
-					&& Arrays.binarySearch(spawnBlockType, block.getRelative(BlockFace.DOWN).getTypeId()) < 0)
-				//debug("Trying to spawn on ", Integer.toString(block.getTypeId()),
-				//		", allowed are ", Arrays.toString(spawnBlockType));
+					&& Arrays.binarySearch(spawnBlockType, block.getRelative(BlockFace.DOWN).getTypeId()) < 0) //debug("Trying to spawn on ", Integer.toString(block.getTypeId()),
+			//		", allowed are ", Arrays.toString(spawnBlockType));
+			{
 				return false;
+			}
 			if (biomes != null
-					&& Arrays.binarySearch(biomes, block.getBiome()) < 0)
-				//debug("Trying to spawn in ", block.getBiome().name(), ", allowed are ", Arrays.toString(biomes));
+					&& Arrays.binarySearch(biomes, block.getBiome()) < 0) //debug("Trying to spawn in ", block.getBiome().name(), ", allowed are ", Arrays.toString(biomes));
+			{
 				return false;
+			}
 
 			byte light = block.getLightLevel();
 			if (block.getWorld().getHighestBlockYAt(block.getX(), block.getZ()) - 1 == block.getY()) {
 				light = 15;
 			}
-			if (light < 4 && !spawnDark)
-				//debug("Trying to spawn in the dark, but not allowed to");
+			if (light < 4 && !spawnDark) //debug("Trying to spawn in the dark, but not allowed to");
+			{
 				return false;
-			if (light >= 4 && !spawnLight)
-				//debug("Trying to spawn in the light, but not allowed to");
+			}
+			if (light >= 4 && !spawnLight) //debug("Trying to spawn in the light, but not allowed to");
+			{
 				return false;
-
-			if (!spawnWater
-					&& (checkFor(Material.WATER, block) || checkFor(Material.STATIONARY_WATER, block)))
-				//debug("Water in the way");
-				return false;
-			if (!spawnLava
-					&& (checkFor(Material.LAVA, block) || checkFor(Material.STATIONARY_LAVA, block)))
-				//debug("Lava in the way");
-				return false;
-
-			if (getCollisionPercent(block) > collisionPercent)
-				//debug("Collision: ", Integer.toString(getCollisionPercent(block)), " > ", Integer.toString(collisionPercent));
-				return false;
-
-			if (needsFoundation && !underfill) {
-				if (!isSupported(block))
-					//debug("Unsupported, but needs foundation");
-					return false;
 			}
 
-			if (checkFor(Material.BEDROCK, block))
-				//debug("Trying to spawn on bedrock");
+			if (!spawnWater
+					&& (checkFor(Material.WATER, block) || checkFor(Material.STATIONARY_WATER, block))) //debug("Water in the way");
+			{
 				return false;
+			}
+			if (!spawnLava
+					&& (checkFor(Material.LAVA, block) || checkFor(Material.STATIONARY_LAVA, block))) //debug("Lava in the way");
+			{
+				return false;
+			}
+
+			if (getCollisionPercent(block) > collisionPercent) //debug("Collision: ", Integer.toString(getCollisionPercent(block)), " > ", Integer.toString(collisionPercent));
+			{
+				return false;
+			}
+
+			if (needsFoundation && !underfill) {
+				if (!isSupported(block)) //debug("Unsupported, but needs foundation");
+				{
+					return false;
+				}
+			}
+
+			if (checkFor(Material.BEDROCK, block)) //debug("Trying to spawn on bedrock");
+			{
+				return false;
+			}
 			//debug("Success!");
 			return true;
 		}
 
 		/*private void debug(String... strings) {
-			StringBuilder sb = new StringBuilder(name).append(": ");
-			for (String string : strings) {
-				sb.append(string);
-			}
-			System.out.println(sb.toString());
+		StringBuilder sb = new StringBuilder(name).append(": ");
+		for (String string : strings) {
+		sb.append(string);
+		}
+		System.out.println(sb.toString());
 		}*/
-
 		private boolean isSupported(Block block) {
 			for (BuildingBlock b : blocks) {
 				Block relative = block.getRelative(b.x, b.y, b.z);
 
 				if (b.y == minY) {
 					relative = relative.getRelative(BlockFace.DOWN);
-					if (!relative.isLiquid() && !relative.isEmpty())
+					if (!relative.isLiquid() && !relative.isEmpty()) {
 						return false;
+					}
 				}
 			}
 			return true;
@@ -469,8 +492,9 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 			for (int x = minX; x <= maxX; x++) {
 				for (int y = minY; y <= maxY; y++) {
 					for (int z = minZ; z <= maxZ; z++) {
-						if (block.getRelative(x, y, z).getType() == material)
+						if (block.getRelative(x, y, z).getType() == material) {
 							return true;
+						}
 					}
 				}
 			}
@@ -479,15 +503,16 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 		/**
 		 * Place a building
-		 * 
+		 *
 		 * @param seed
 		 *            The block where location 0, 0, 0 would be
 		 * @param random
 		 *            A random number generator to be used in calculations
 		 */
 		public void place(Block seed, Random random) {
-			if (!canPlaceOn(seed))
+			if (!canPlaceOn(seed)) {
 				return;
+			}
 
 			if (underfill) {
 				for (BuildingBlock block : blocks) {
@@ -514,21 +539,22 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 		/**
 		 * Place a building, respecting rarity
-		 * 
+		 *
 		 * @param seed
 		 *            The block where location 0, 0, 0 would be
 		 * @param random
 		 *            A random number generator to be used in calculations
 		 */
 		public void maybePlace(Block seed, Random random) {
-			if (random.nextInt(100) < rarity)
+			if (random.nextInt(100) < rarity) {
 				return;
+			}
 			place(seed, random);
 		}
 
 		/**
 		 * Place a building with random blocks skipped
-		 * 
+		 *
 		 * @param seed
 		 *            The block where location 0, 0, 0 would be
 		 * @param random
@@ -539,13 +565,16 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		 *            The maximum percent of blocks to skip
 		 */
 		public void placeDestroyed(Block seed, Random random, int min, int max) {
-			if (!canPlaceOn(seed))
+			if (!canPlaceOn(seed)) {
 				return;
+			}
 
-			if (min > max)
+			if (min > max) {
 				return;
-			if (min >= 100)
+			}
+			if (min >= 100) {
 				return;
+			}
 
 			if (underfill) {
 				for (BuildingBlock block : blocks) {
@@ -575,7 +604,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 
 		/**
 		 * Place a building with random blocks skipped, respecting rarity
-		 * 
+		 *
 		 * @param seed
 		 *            The block where location 0, 0, 0 would be
 		 * @param random
@@ -586,9 +615,10 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		 *            The maximum percent of blocks to skip
 		 */
 		public void maybePlaceDestroyed(Block seed, Random random, int min,
-			int max) {
-			if (random.nextInt(100) < rarity)
+										int max) {
+			if (random.nextInt(100) < rarity) {
 				return;
+			}
 			placeDestroyed(seed, random, min, max);
 		}
 	}
@@ -614,8 +644,9 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 			id = (byte) Integer.parseInt(remaining.group(1));
 			data = remaining.group(2) == null ? 0
 					: Byte.parseByte(remaining.group(2));
-			if (remaining.group(3) != null || remaining.group(4) != null)
+			if (remaining.group(3) != null || remaining.group(4) != null) {
 				throw new OperationNotSupportedException("Branches are not yet supported");
+			}
 		}
 
 		private BuildingBlock(int x, int y, int z, byte id, byte data) {
@@ -629,25 +660,25 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		BuildingBlock rotate(int rot) {
 			int newX, newZ;
 			switch (rot) {
-			case 0: // north
-				newX = x;
-				newZ = z;
-				break;
-			case 1: // east
-				newX = z;
-				newZ = -x;
-				break;
-			case 2: // south
-				newX = -x;
-				newZ = -z;
-				break;
-			case 3: // west
-				newX = -z;
-				newZ = x;
-				break;
-			default:
-				throw new IllegalArgumentException("rot = " + rot
-						+ "; must be 0 <= rot < 4");
+				case 0: // north
+					newX = x;
+					newZ = z;
+					break;
+				case 1: // east
+					newX = z;
+					newZ = -x;
+					break;
+				case 2: // south
+					newX = -x;
+					newZ = -z;
+					break;
+				case 3: // west
+					newX = -z;
+					newZ = x;
+					break;
+				default:
+					throw new IllegalArgumentException("rot = " + rot
+							+ "; must be 0 <= rot < 4");
 			}
 			return new BuildingBlock(newX, y, newZ, id, data);
 		}
