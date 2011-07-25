@@ -1,0 +1,34 @@
+            ----------
+            BananaGen
+            ----------
+            BananaCode
+            ----------
+            2011-07-25
+
+Vital stats
+
+  * <<Current version:>> 0.1
+
+  * <<Compatible Bukkit builds:>> 984-1000
+
+  * <<Absolute Newest Dev Build:>> http://dl.dropbox.com/u/17504664/Builds/BananaGen-Dev.jar (Use at your own risk!)
+
+What does it do?
+
+  BananaGen is a chunk generator/block populator suite with infinite possibilities via its easily
+  configurable generators. A {{{https://raw.github.com/Nightgunner5/BananaGen/master/src/args.yml}list of configuration options}}
+  is available, along with {{{https://github.com/Nightgunner5/BananaGen/wiki/Configuring-BananaGen}an explanation of how to configure a generator}}.
+
+Contributors
+
+  <In no particular order>
+
+  * <<Dinnerbone>> for use of his code to generate large amounts of chunks
+
+  * <<Nightgunner5>> for writing the chunk generators, a few populators, and the API for generators and populators to accept configuration options easily
+
+  * <<codename_B>> for gathering the amazing populators used in {{{http://forums.bukkit.org/threads/22623/}BananaImageToMap}}
+
+  * <<The entire Bukkit team>> for the awesome flexibility Bukkit gives
+
+  * <<The countless people who told me I suck>> because they also told me how I could make the generators better. Thanks, guys!

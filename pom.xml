@@ -9,7 +9,7 @@
 	<version>0.1</version>
 	<name>BananaGen</name>
 	<url>https://github.com/BananaCode/BananaGen/wiki</url>
-	<description></description>
+	<description>BananaGen is a chunk generator/block populator suite for Bukkit, a modification of the Minecraft server, with infinite possibilities via its easily configurable generators.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -19,12 +19,34 @@
 	</organization>
 	<developers>
 		<developer>
-			<name>Nightgunner5</name>
-		</developer>
-		<developer>
 			<name>codename_B</name>
 		</developer>
+		<developer>
+			<name>Nightgunner5</name>
+		</developer>
 	</developers>
+	<contributors>
+		<contributor>
+			<name>Dinnerbone</name>
+		</contributor>
+		<contributor>
+			<name>fernferret</name>
+		</contributor>
+		<contributor>
+			<name>SpaceManiac</name>
+		</contributor>
+	</contributors>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/BananaCode/BananaGen/issues</url>
+	</issueManagement>
+	<licenses>
+		<license>
+			<distribution>repo</distribution>
+			<name>BANANACODE PUBLIC LICENSE</name>
+			<url>https://raw.github.com/BananaCode/BananaGen/master/LICENSE</url>
+		</license>
+	</licenses>
 	<packaging>jar</packaging>
 	<scm>
 		<developerConnection>scm:git:git@github.com:BananaCode/BananaGen.git</developerConnection>
@@ -135,11 +157,19 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.8</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<links>
 						<link>http://jd.bukkit.org/apidocs/</link>
 					</links>
-					<excludePackageNames>net.llamaslayers.minecraft.banana.gen.*.core</excludePackageNames>
+					<excludePackageNames>net.llamaslayers.minecraft.banana.gen.generators.core,net.llamaslayers.minecraft.banana.gen.populators.core</excludePackageNames>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -188,6 +218,31 @@
 							<include>com.google.guava:*</include>
 						</includes>
 					</artifactSet>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<siteDirectory>${basedir}/site</siteDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0-beta-3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>site</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<generateSitemap>true</generateSitemap>
+					<siteDirectory>${basedir}/site</siteDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
