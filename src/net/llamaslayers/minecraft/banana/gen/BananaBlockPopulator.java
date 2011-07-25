@@ -13,7 +13,7 @@ import org.bukkit.generator.BlockPopulator;
 /**
  * @author Nightgunner5
  */
-public abstract class BananaBlockPopulator extends BlockPopulator {
+public abstract class BananaBlockPopulator extends BlockPopulator implements MaterialIds {
 	private final Map<World, BananaChunkGenerator> generators = new HashMap<World, BananaChunkGenerator>();
 	private BananaChunkGenerator defgen = null;
 
@@ -106,7 +106,7 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 	/**
 	 * Sets a block to a specified material, but only if the block was
 	 * previously air.
-	 * 
+	 *
 	 * @param world
 	 *            The world in which to set the block
 	 * @param x
@@ -131,7 +131,7 @@ public abstract class BananaBlockPopulator extends BlockPopulator {
 	/**
 	 * Sets a block to a specified material, but only if the block was
 	 * previously air.
-	 * 
+	 *
 	 * @param world
 	 *            The world in which to set the block
 	 * @param x

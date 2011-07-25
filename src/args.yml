@@ -99,13 +99,3 @@ subterranian:
     nether:
         type: flag
         description: Setting this flag will use more nether-like materials.
-    torch_max:
-        type: integer
-        description: The maximum number of torches per chunk (16x16 blocks). Negative numbers or zero mean no torches will be placed.
-        default: 3
-    torch_chance:
-        type: integer
-        description: The chance out of 100 that a torch will be placed on each iteration. 100% doesn't mean every chunk will have the maximum number of torches because there can be failed placement attempts.
-        default: 70
-        min: 0
-        max: 100

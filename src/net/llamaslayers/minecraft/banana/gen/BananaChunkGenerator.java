@@ -16,7 +16,7 @@ import com.google.common.collect.MapMaker;
 /**
  * @author Nightgunner5
  */
-public abstract class BananaChunkGenerator extends ChunkGenerator {
+public abstract class BananaChunkGenerator extends ChunkGenerator implements MaterialIds {
 	/**
 	 * Populators to be returned by {@link #getDefaultPopulators(World)}
 	 */
@@ -27,7 +27,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 	 */
 	@Override
 	public final List<BlockPopulator> getDefaultPopulators(World world) {
-		if (world != null && getArg(world, "nopopulate"))
+		if (populators == null || (world != null && getArg(world, "nopopulate")))
 			return Collections.emptyList();
 		return populators;
 	}
@@ -245,7 +245,7 @@ public abstract class BananaChunkGenerator extends ChunkGenerator {
 
 	/**
 	 * Stop spawning over water or 100 feet from the ground.
-	 * 
+	 *
 	 * @see org.bukkit.generator.ChunkGenerator#getFixedSpawnLocation(org.bukkit.World,
 	 *      java.util.Random)
 	 */

@@ -9,7 +9,6 @@ import net.llamaslayers.minecraft.banana.gen.UndergroundGenerator;
 import net.llamaslayers.minecraft.banana.gen.populators.GlowstonePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.OctaveGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
@@ -17,7 +16,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 /**
  * @author Nightgunner5
  */
-@Args({"nopopulate", "nether", "torch_max", "torch_chance"})
+@Args({"nopopulate", "nether"})
 public class SubterranianGenerator extends BananaChunkGenerator implements UndergroundGenerator {
 	{
 		populators = Arrays.asList(
@@ -78,10 +77,10 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 		chunkZ <<= 4;
 
 		boolean nether = getArg(world, "nether");
-		byte air = (byte) Material.AIR.getId();
-		byte bedrock = (byte) Material.BEDROCK.getId();
-		byte stone = (byte) (nether ? Material.NETHERRACK : Material.STONE).getId();
-		byte lava = (byte) Material.LAVA.getId();
+		byte air = AIR;
+		byte bedrock = BEDROCK;
+		byte stone = nether ? NETHERRACK : STONE;
+		byte lava = LAVA;
 		int height = 128;
 
 		byte[] b = new byte[272 * height];

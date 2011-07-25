@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
 import net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator;
+import net.llamaslayers.minecraft.banana.gen.generators.CityGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.HillyGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.SubterranianGenerator;
@@ -20,8 +21,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
@@ -44,6 +43,7 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 		generators.put("mountains", new MountainGenerator());
 		generators.put("beach", new BeachGenerator());
 		generators.put("subterranian", new SubterranianGenerator());
+		generators.put("city", new CityGenerator());
 	}
 
 	@Override

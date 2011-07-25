@@ -59,19 +59,18 @@ public class HillyGenerator extends BananaChunkGenerator {
 		chunkZ <<= 4;
 
 		boolean nether = getArg(world, "nether");
-		byte matMain = (byte) (nether ? Material.NETHERRACK : Material.DIRT).getId();
-		byte matShore = (byte) (nether ? Material.SOUL_SAND : Material.SAND).getId();
-		byte matShore2 = (byte) Material.GRAVEL.getId();
-		byte matTop = (byte) (nether ? Material.NETHERRACK : Material.GRASS).getId();
+		byte matMain = nether ? NETHERRACK : DIRT;
+		byte matShore = nether ? SOUL_SAND : SAND;
+		byte matShore2 = GRAVEL;
+		byte matTop = nether ? NETHERRACK : GRASS;
 		try {
 			matTop = (byte) Material.valueOf(getArgString(world, "groundcover", "")).getId();
 		} catch (IllegalArgumentException ex) {
 			// TODO: complain?
 		}
-		byte matUnder = (byte) (nether ? Material.NETHERRACK : Material.STONE).getId();
-		byte matLiquid = (byte) (nether ? Material.STATIONARY_LAVA
-				: Material.STATIONARY_WATER).getId();
-		byte bedrock = (byte) Material.BEDROCK.getId();
+		byte matUnder = nether ? NETHERRACK : STONE;
+		byte matLiquid = nether ? STATIONARY_LAVA : STATIONARY_WATER;
+		byte bedrock = BEDROCK;
 
 		byte[] b = new byte[272 * 128];
 

@@ -47,12 +47,12 @@ public class MountainGenerator extends BananaChunkGenerator {
 
 		byte[] b = new byte[272 * 128];
 
-		byte dirt = (byte) Material.DIRT.getId();
-		byte cobblestone = (byte) Material.COBBLESTONE.getId();
-		byte stone = (byte) Material.STONE.getId();
-		byte snow = (byte) Material.SNOW.getId();
-		byte grass = (byte) Material.GRASS.getId();
-		byte bedrock = (byte) Material.BEDROCK.getId();
+		byte dirt = DIRT;
+		byte cobblestone = COBBLESTONE;
+		byte stone = STONE;
+		byte snow = SNOW;
+		byte grass = GRASS;
+		byte bedrock = BEDROCK;
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
