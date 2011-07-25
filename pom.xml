@@ -8,16 +8,28 @@
 	<artifactId>bananagen</artifactId>
 	<version>0.1</version>
 	<name>BananaGen</name>
-	<url></url>
+	<url>https://github.com/BananaCode/BananaGen/wiki</url>
 	<description></description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<organization>
+		<name>BananaCode</name>
+		<url>https://github.com/BananaCode</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Nightgunner5</name>
+		</developer>
+		<developer>
+			<name>codename_B</name>
+		</developer>
+	</developers>
 	<packaging>jar</packaging>
 	<scm>
-		<developerConnection>scm:git:git@github.com:Nightgunner5/BananaGen.git</developerConnection>
-		<connection>scm:git:git://github.com/Nightgunner5/BananaGen.git</connection>
-		<url>https://github.com/Nightgunner5/BananaGen/tree/master/</url>
+		<developerConnection>scm:git:git@github.com:BananaCode/BananaGen.git</developerConnection>
+		<connection>scm:git:git://github.com/BananaCode/BananaGen.git</connection>
+		<url>https://github.com/BananaCode/BananaGen/tree/master/</url>
 	</scm>
 
 	<repositories>
@@ -84,6 +96,9 @@
 				<includes>
 					<include>**/*.java</include>
 				</includes>
+				<excludes>
+					<exclude>net/llamaslayers/minecraft/banana/gen/*/core/**</exclude>
+				</excludes>
 			</resource>
 		</resources>
 
@@ -124,6 +139,7 @@
 					<links>
 						<link>http://jd.bukkit.org/apidocs/</link>
 					</links>
+					<excludePackageNames>net.llamaslayers.minecraft.banana.gen.*.core</excludePackageNames>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -148,6 +164,10 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<showDeprecation>true</showDeprecation>
+					<excludes>
+						<!-- Seeeecret project -->
+						<exclude>net/llamaslayers/minecraft/banana/gen/*/core/*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
