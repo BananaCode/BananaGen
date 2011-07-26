@@ -21,8 +21,9 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 @Args({"nopopulate", "nether", "matmain", "matshore", "matshore2", "groundcover",
 	"matunder", "matliquid", "baseheight", "tscale", "terrainheight", "nodirt",
 	"waterlevel", "tree_scarcity", "torch_max", "torch_chance", "noquarries",
-	"nolakes", "nodeserts", "noruins", "notrees", "nomushrooms", "nosnow",
-	"noflowers", "nospookyrooms", "nocaves", "notorches", "noores"})
+	"nolakes", "nodeserts", "noruins", "noruins2", "notrees", "nomushrooms",
+	"nosnow", "noflowers", "nospookyrooms", "nocaves", "notorches", "noores",
+	"ruins2material"})
 public class HillyGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(
@@ -33,6 +34,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 				// Desert is before tree and mushroom but snow is after so trees have snow on top
 				new DesertPopulator().setDefault(this),
 				new RuinsPopulator().setDefault(this),
+				new RuinsPopulator2().setDefault(this),
 				new TreePopulator().setDefault(this),
 				new MushroomPopulator().setDefault(this),
 				new SnowPopulator().setDefault(this),

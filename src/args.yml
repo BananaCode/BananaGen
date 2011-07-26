@@ -104,6 +104,13 @@ hilly:
     noores:
         type: flag
         description: Skip populating ores
+    noruins2:
+        type: flag
+        description: Skip populating stalagmite-like ruins
+    ruins2material:
+        type: string
+        description: Material for stalagmite-like ruins
+        default: COBBLESTONE
 mountains:
     nopopulate:
         type: flag
