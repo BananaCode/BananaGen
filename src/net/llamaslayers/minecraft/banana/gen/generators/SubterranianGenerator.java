@@ -6,7 +6,8 @@ import java.util.Random;
 import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.UndergroundGenerator;
-import net.llamaslayers.minecraft.banana.gen.populators.GlowstonePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.NotchGlowstonePopulator;
+import net.llamaslayers.minecraft.banana.gen.populators.NotchGlowstonePopulator2;
 import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +22,8 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 	{
 		populators = Arrays.asList(
 				new OrePopulator().setDefault(this),
-				new GlowstonePopulator().setDefault(this));
+				new NotchGlowstonePopulator().setDefault(this),
+				new NotchGlowstonePopulator2().setDefault(this));
 	}
 
 	@Override
