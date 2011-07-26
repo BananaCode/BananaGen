@@ -13,7 +13,7 @@ import org.bukkit.block.BlockFace;
 
 /**
  * BlockPopulator that turns deserts into sand and places cacti.
- * 
+ *
  * @author codename_B
  */
 public class DesertPopulator extends BananaBlockPopulator {
@@ -23,6 +23,8 @@ public class DesertPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk chunk) {
+		if (getArg(world, "nodeserts"))
+			return;
 		Material matSand = getArg(world, "nether") ? Material.SOUL_SAND
 				: Material.SAND;
 		Material matDirt = getArg(world, "nether") ? Material.NETHERRACK

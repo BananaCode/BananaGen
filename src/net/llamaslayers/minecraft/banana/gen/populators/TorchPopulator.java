@@ -13,7 +13,7 @@ import org.bukkit.block.BlockFace;
 
 /**
  * Populator from BananaMaze to place torches on random surfaces.
- * 
+ *
  * @author Nightgunner5
  */
 public class TorchPopulator extends BananaBlockPopulator {
@@ -28,6 +28,9 @@ public class TorchPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "notorches"))
+			return;
+
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
 
 		for (int i = 0; i < getArgInt(world, "torch_max", 3); i++) {

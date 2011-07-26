@@ -31,9 +31,10 @@ public class OrePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
-		if (getArg(world, "nether")) {
+		if (getArg(world, "noores"))
 			return;
-		}
+		if (getArg(world, "nether"))
+			return;
 
 		for (int i = 0; i < type.length; i++) {
 			for (int j = 0; j < iterations[i]; j++) {

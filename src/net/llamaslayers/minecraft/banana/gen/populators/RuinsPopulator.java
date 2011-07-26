@@ -12,7 +12,7 @@ import org.bukkit.block.BlockFace;
 
 /**
  * Populator from BananaMaze to make crumbling walls.
- * 
+ *
  * @author Nightgunner5
  */
 public class RuinsPopulator extends BananaBlockPopulator {
@@ -29,6 +29,8 @@ public class RuinsPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noruins"))
+			return;
 		ChunkSnapshot snapshot = source.getChunkSnapshot();
 		int ruins = 0;
 		while (random.nextInt(100) < RUINS_CHANCE

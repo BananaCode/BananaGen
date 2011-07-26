@@ -47,6 +47,8 @@ public class CavePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(final World world, final Random random, Chunk source) {
+		if (getArg(world, "nocaves"))
+			return;
 		if (random.nextInt(100) < 10) {
 			final int x = 4 + random.nextInt(8) + source.getX() * 16;
 			final int z = 4 + random.nextInt(8) + source.getZ() * 16;

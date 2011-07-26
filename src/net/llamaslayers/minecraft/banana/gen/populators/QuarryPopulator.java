@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 
 /**
  * BlockPopulator that generates stone quarries.
- * 
+ *
  * @author codename_B
  */
 public class QuarryPopulator extends BananaBlockPopulator {
@@ -21,6 +21,8 @@ public class QuarryPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noquarries"))
+			return;
 		if (random.nextInt(100) < 95)
 			return;
 

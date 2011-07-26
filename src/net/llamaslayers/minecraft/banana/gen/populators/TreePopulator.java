@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 
 /**
  * BlockPopulator that adds trees based on the biome.
- * 
+ *
  * @author heldplayer
  */
 public class TreePopulator extends BananaBlockPopulator {
@@ -24,6 +24,9 @@ public class TreePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "notrees"))
+			return;
+
 		if (getArg(world, "nether"))
 			return;
 

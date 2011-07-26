@@ -5,10 +5,30 @@ hilly:
     nether:
         type: flag
         description: Setting this flag will use more nether-like materials.
+    matmain:
+        type: string
+        description: Material under grass and wherever dirt fields are. Defaults to NETHERRACK if nether is set.
+        default: DIRT
+    matshore:
+        type: string
+        description: Shore type 1 material. Defaults to SOUL_SAND if nether is set.
+        default: SAND
+    matshore2:
+        type: string
+        description: Shore type 2 material.
+        default: GRAVEL
     groundcover:
         type: string
         description: The material that will be placed on top of dirt (or netherrack if nether is set). Defaults to NETHERRACK if nether is set.
         default: GRASS
+    matunder:
+        type: string
+        description: Underground material. Defaults to NETHERRACK if nether is set.
+        default: STONE
+    matliquid:
+        type: string
+        description: Ocean/lake/pond material. Defaults to STATIONARY_LAVA if nether is set.
+        default: STATIONARY_WATER
     baseheight:
         type: integer
         description: The base height that terrain is calculated from. The minimum and maximum heights (pre-population) are baseheight +- terrainheight
@@ -48,6 +68,42 @@ hilly:
         default: 70
         min: 0
         max: 100
+    noquarries:
+        type: flag
+        description: Skip populating quarries
+    nolakes:
+        type: flag
+        description: Skip populating lakes
+    nodeserts:
+        type: flag
+        description: Skip populating deserts and cacti
+    noruins:
+        type: flag
+        description: Skip populating ruins
+    notrees:
+        type: flag
+        description: Skip populating trees
+    nomushrooms:
+        type: flag
+        description: Skip populating giant mushrooms
+    nosnow:
+        type: flag
+        description: Skip populating snow and ice
+    noflowers:
+        type: flag
+        description: Skip populating flowers and tall grass
+    nospookyrooms:
+        type: flag
+        description: Skip populating spooky rooms
+    nocaves:
+        type: flag
+        description: Skip populating caves
+    notorches:
+        type: flag
+        description: Skip populating torches
+    noores:
+        type: flag
+        description: Skip populating ores
 mountains:
     nopopulate:
         type: flag
@@ -85,6 +141,18 @@ mountains:
         default: 50
         min: 0
         max: 127
+    noboulders:
+        type: flag
+        description: Skip populating boulders
+    noores:
+        type: flag
+        description: Skip populating ores
+    nocaves:
+        type: flag
+        description: Skip populating caves
+    noflowers:
+        type: flag
+        description: Skip populating flowers and tall grass
 beach:
     nopopulate:
         type: flag
@@ -92,6 +160,18 @@ beach:
     nether:
         type: flag
         description: Setting this flag will use more nether-like materials.
+    noores:
+        type: flag
+        description: Skip populating ores
+    nopalmtrees:
+        type: flag
+        description: Skip populating palm trees
+    noboats:
+        type: flag
+        description: Skip populating boats
+    noshipwrecks:
+        type: flag
+        description: Skip populating shipwrecks
 subterranian:
     nopopulate:
         type: flag
@@ -99,3 +179,13 @@ subterranian:
     nether:
         type: flag
         description: Setting this flag will use more nether-like materials.
+city:
+    nostreetlights:
+        type: flag
+        description: Skip populating streetlights
+    nether:
+        type: flag
+        description: Setting this flag will use more nether-like materials.
+    noores:
+        type: flag
+        description: Skip populating ores

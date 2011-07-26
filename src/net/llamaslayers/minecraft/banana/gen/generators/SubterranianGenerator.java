@@ -21,7 +21,6 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 public class SubterranianGenerator extends BananaChunkGenerator implements UndergroundGenerator {
 	{
 		populators = Arrays.asList(
-				new OrePopulator().setDefault(this),
 				new NotchGlowstonePopulator().setDefault(this),
 				new NotchGlowstonePopulator2().setDefault(this));
 	}

@@ -11,7 +11,7 @@ import org.bukkit.entity.Boat;
 
 /**
  * Boats. You heard me the first time.
- * 
+ *
  * @author codename_B
  */
 public class BoatPopulator extends BananaBlockPopulator {
@@ -21,6 +21,8 @@ public class BoatPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noboats"))
+			return;
 		if (random.nextInt(100) < 5) {
 			int x = source.getX() * 16 + random.nextInt(16);
 			int z = source.getZ() * 16 + random.nextInt(16);

@@ -19,16 +19,15 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 /**
  * @author Nightgunner5
  */
-@Args({ "nopopulate", "nether", "boulder_chance", "boulder_smallest",
-		"boulder_largest", "boulder_lowest", "boulder_highest" })
+@Args({"nopopulate", "nether", "boulder_chance", "boulder_smallest", "boulder_largest",
+	"boulder_lowest", "boulder_highest", "noboulders", "noores", "nocaves", "noflowers"})
 public class MountainGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(
 				new BoulderPopulator().setDefault(this),
 				new OrePopulator().setDefault(this),
 				new CavePopulator().setDefault(this),
-				new FlowerPopulator().setDefault(this)
-				);
+				new FlowerPopulator().setDefault(this));
 	}
 
 	/**
@@ -58,8 +57,7 @@ public class MountainGenerator extends BananaChunkGenerator {
 			for (int z = 0; z < 16; z++) {
 				int deep = 0;
 				for (int y = (int) (25 + Math.pow(96, noiseTerrainHeight.noise(
-						x + chunkX, z + chunkZ, 0.5, 0.5, true)) + noiseTerrainJitter
-						.noise(x + chunkX, z + chunkZ, 0.7, 0.5, true) * 3); y > 0; y--) {
+						x + chunkX, z + chunkZ, 0.5, 0.5, true)) + noiseTerrainJitter.noise(x + chunkX, z + chunkZ, 0.7, 0.5, true) * 3); y > 0; y--) {
 					double terrainType = noiseTerrainType.noise(x + chunkX, z
 							+ chunkZ, 0.5, 0.5, true)
 							* 5 + y + random.nextDouble() * 10 - 5;
@@ -92,7 +90,7 @@ public class MountainGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	protected void createWorldOctaves(World world,
-		Map<String, OctaveGenerator> octaves) {
+									  Map<String, OctaveGenerator> octaves) {
 		Random seed = new Random(world.getSeed());
 
 		OctaveGenerator gen = new SimplexOctaveGenerator(seed, 1);

@@ -18,9 +18,11 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
  *
  * @author Nightgunner5
  */
-@Args({ "nopopulate", "nether", "groundcover", "baseheight", "tscale",
-		"terrainheight", "nodirt", "waterlevel", "tree_scarcity", "torch_max",
-		"torch_chance" })
+@Args({"nopopulate", "nether", "matmain", "matshore", "matshore2", "groundcover",
+	"matunder", "matliquid", "baseheight", "tscale", "terrainheight", "nodirt",
+	"waterlevel", "tree_scarcity", "torch_max", "torch_chance", "noquarries",
+	"nolakes", "nodeserts", "noruins", "notrees", "nomushrooms", "nosnow",
+	"noflowers", "nospookyrooms", "nocaves", "notorches", "noores"})
 public class HillyGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(
@@ -40,8 +42,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 				new DungeonPopulator().setDefault(this),
 				new CavePopulator().setDefault(this),
 				new TorchPopulator().setDefault(this),
-				new OrePopulator().setDefault(this)
-				);
+				new OrePopulator().setDefault(this));
 	}
 
 	/**
@@ -60,8 +61,23 @@ public class HillyGenerator extends BananaChunkGenerator {
 
 		boolean nether = getArg(world, "nether");
 		byte matMain = nether ? NETHERRACK : DIRT;
+		try {
+			matMain = (byte) Material.valueOf(getArgString(world, "matmain", "")).getId();
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		byte matShore = nether ? SOUL_SAND : SAND;
+		try {
+			matShore = (byte) Material.valueOf(getArgString(world, "matshore", "")).getId();
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		byte matShore2 = GRAVEL;
+		try {
+			matShore2 = (byte) Material.valueOf(getArgString(world, "matshore2", "")).getId();
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		byte matTop = nether ? NETHERRACK : GRASS;
 		try {
 			matTop = (byte) Material.valueOf(getArgString(world, "groundcover", "")).getId();
@@ -69,7 +85,17 @@ public class HillyGenerator extends BananaChunkGenerator {
 			// TODO: complain?
 		}
 		byte matUnder = nether ? NETHERRACK : STONE;
+		try {
+			matUnder = (byte) Material.valueOf(getArgString(world, "matunder", "")).getId();
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		byte matLiquid = nether ? STATIONARY_LAVA : STATIONARY_WATER;
+		try {
+			matLiquid = (byte) Material.valueOf(getArgString(world, "matliquid", "")).getId();
+		} catch (IllegalArgumentException ex) {
+			// TODO: complain?
+		}
 		byte bedrock = BEDROCK;
 
 		byte[] b = new byte[272 * 128];
@@ -139,7 +165,7 @@ public class HillyGenerator extends BananaChunkGenerator {
 	 */
 	@Override
 	protected void createWorldOctaves(World world,
-		Map<String, OctaveGenerator> octaves) {
+									  Map<String, OctaveGenerator> octaves) {
 		Random seed = new Random(world.getSeed());
 
 		/* With default settings, this is 5 octaves. With tscale=256,terrainheight=50,

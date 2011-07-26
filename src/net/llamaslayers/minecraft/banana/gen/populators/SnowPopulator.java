@@ -15,7 +15,7 @@ import org.bukkit.block.BlockFace;
 /**
  * BlockPopulator that coats {@link Biome#TUNDRA tundra} and {@link Biome#TAIGA
  * taiga} with snow.
- * 
+ *
  * @author codename_B
  */
 public class SnowPopulator extends BananaBlockPopulator {
@@ -25,6 +25,8 @@ public class SnowPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nosnow"))
+			return;
 		if (getArg(world, "nether"))
 			return;
 

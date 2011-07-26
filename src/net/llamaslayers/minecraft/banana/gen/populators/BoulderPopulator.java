@@ -13,7 +13,7 @@ import org.bukkit.World;
  * Generates boulders for the foot of
  * {@link net.llamaslayers.minecraft.banana.gen.generators.MountainGenerator a
  * mountain}
- * 
+ *
  * @author Nightgunner5
  */
 public class BoulderPopulator extends BananaBlockPopulator {
@@ -25,6 +25,8 @@ public class BoulderPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noboulders"))
+			return;
 		int minY = getArgInt(world, "boulder_lowest", 20, 0, 127);
 		int maxY = getArgInt(world, "boulder_highest", 50, 0, 127);
 		int minSize = getArgInt(world, "boulder_smallest", 2, 1, 50);

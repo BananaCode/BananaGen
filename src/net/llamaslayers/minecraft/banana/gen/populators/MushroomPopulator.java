@@ -24,6 +24,8 @@ public class MushroomPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nomushrooms"))
+			return;
 		if (random.nextInt(16) > 0) {
 			return;
 		}

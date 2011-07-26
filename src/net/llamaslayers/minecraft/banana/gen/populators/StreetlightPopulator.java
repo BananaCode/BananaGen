@@ -11,6 +11,8 @@ import org.bukkit.World;
 public class StreetlightPopulator extends BananaBlockPopulator {
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nostreetlights"))
+			return;
 		for (int i = 0; i < 10; i++) {
 			int x = random.nextInt(16);
 			int z = random.nextInt(16);

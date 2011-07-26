@@ -13,7 +13,7 @@ import org.bukkit.block.BlockFace;
 
 /**
  * BlockPopulator that places yellow flowers, red roses, and tall grass.
- * 
+ *
  * @author codename_B
  */
 public class FlowerPopulator extends BananaBlockPopulator {
@@ -23,6 +23,8 @@ public class FlowerPopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noflowers"))
+			return;
 		if (getArg(world, "nether"))
 			return;
 

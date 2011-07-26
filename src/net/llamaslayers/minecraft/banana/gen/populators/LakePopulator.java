@@ -26,6 +26,8 @@ public class LakePopulator extends BananaBlockPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nolakes"))
+			return;
 		if (random.nextInt(10) > 1)
 			return;
 

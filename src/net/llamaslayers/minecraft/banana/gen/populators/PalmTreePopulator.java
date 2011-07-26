@@ -11,7 +11,7 @@ import org.bukkit.block.BlockFace;
  * Generate palm trees, like those one would find on a
  * {@link net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator beach}
  * .
- * 
+ *
  * @author codename_B
  * @author Nightgunner5
  */
@@ -27,6 +27,8 @@ public class PalmTreePopulator extends BuildingPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "nopalmtrees"))
+			return;
 		int x = random.nextInt(16);
 		int z = random.nextInt(16);
 

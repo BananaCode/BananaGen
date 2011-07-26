@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.BananaChunkGenerator;
 import net.llamaslayers.minecraft.banana.gen.generators.city.CityBlockPopulator;
 import net.llamaslayers.minecraft.banana.gen.generators.city.Fountain;
+import net.llamaslayers.minecraft.banana.gen.populators.OrePopulator;
 import net.llamaslayers.minecraft.banana.gen.populators.StreetlightPopulator;
 import org.bukkit.World;
 import org.bukkit.util.noise.OctaveGenerator;
@@ -16,10 +18,12 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
 /**
  * @author Nightgunner5
  */
+@Args({"nostreetlights", "nether", "noores"})
 public class CityGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(
-				new StreetlightPopulator().setDefault(this));
+				new StreetlightPopulator().setDefault(this),
+				new OrePopulator().setDefault(this));
 	}
 
 	@Override

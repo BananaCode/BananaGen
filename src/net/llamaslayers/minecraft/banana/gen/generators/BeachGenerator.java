@@ -21,7 +21,7 @@ import org.bukkit.util.noise.SimplexOctaveGenerator;
  *
  * @author Nightgunner5
  */
-@Args({"nopopulate", "nether"})
+@Args({"nopopulate", "nether", "noores", "nopalmtrees", "noboats", "noshipwrecks"})
 public class BeachGenerator extends BananaChunkGenerator {
 	{
 		populators = Arrays.asList(

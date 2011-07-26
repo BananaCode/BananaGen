@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.llamaslayers.minecraft.banana.gen.populators;
 
@@ -25,6 +25,8 @@ public class ShipwreckPopulator extends BuildingPopulator {
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
+		if (getArg(world, "noshipwrecks"))
+			return;
 		int x = random.nextInt(16);
 		int z = random.nextInt(16);
 
