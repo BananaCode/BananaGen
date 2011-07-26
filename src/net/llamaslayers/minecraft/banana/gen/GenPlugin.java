@@ -56,7 +56,8 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 	public void onEnable() {
 		getServer().getLogger().info("[BananaGen] Starting...");
 		instance = this;
-		getServer().getScheduler().scheduleSyncDelayedTask(this, this);
+		if (getConfiguration().getBoolean("load_worlds", true))
+			getServer().getScheduler().scheduleSyncDelayedTask(this, this);
 	}
 
 	@Override
