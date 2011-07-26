@@ -23,9 +23,6 @@ public class NotchGlowstonePopulator2 extends BananaBlockPopulator {
 	 * Populates a world with glowstone (2). Easily configurable (but results in
 	 * more rare glowstone) by modifying NotchGlowstonePopulator's
 	 * suitable()-method.
-	 *
-	 * @author Markus 'Notch' Persson
-	 * @author iffa
 	 */
 	@Override
 	public void populate(World world, Random random, Chunk source) {
