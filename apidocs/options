@@ -22,6 +22,7 @@
 'http://jnbt.sourceforge.net/doc'
 -linkoffline
 'http://download.oracle.com/javase/6/docs/api' 'I:/Documents and Settings/Benjamin/eclipse workspace/BananaGen/target/javadoc-bundle-options'
+-notimestamp
 -use
 -version
 -windowtitle
