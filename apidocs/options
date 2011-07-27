@@ -1,0 +1,28 @@
+-classpath
+'I:/Documents and Settings/Benjamin/eclipse workspace/BananaGen/target/classes;I:/Documents and Settings/Benjamin/.m2/repository/com/google/guava/guava-primitives/r03/guava-primitives-r03.jar;I:/Documents and Settings/Benjamin/.m2/repository/com/google/guava/guava-base/r03/guava-base-r03.jar;I:/Documents and Settings/Benjamin/.m2/repository/com/google/guava/guava-collections/r03/guava-collections-r03.jar;I:/Documents and Settings/Benjamin/.m2/repository/org/bukkit/bukkit/0.0.1-SNAPSHOT/bukkit-0.0.1-SNAPSHOT.jar;I:/Documents and Settings/Benjamin/.m2/repository/com/google/guava/guava-annotations/r03/guava-annotations-r03.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'I:/Documents and Settings/Benjamin/eclipse workspace/BananaGen/src'
+-author
+-bottom
+'Copyright &#169; 2011 <a href="https://github.com/BananaCode">BananaCode</a>. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'I:/Documents and Settings/Benjamin/eclipse workspace/BananaGen/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'BananaGen 0.1 API'
+-link
+'http://jd.bukkit.org/apidocs'
+-link
+'http://jnbt.sourceforge.net/doc'
+-linkoffline
+'http://download.oracle.com/javase/6/docs/api' 'I:/Documents and Settings/Benjamin/eclipse workspace/BananaGen/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'BananaGen 0.1 API'
