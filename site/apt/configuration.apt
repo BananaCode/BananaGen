@@ -1,0 +1,62 @@
+            ----------
+           Configuration
+            ----------
+            BananaCode
+            ----------
+            2011-07-27
+
+Configuration
+
+  In this tutorial, a list will be referenced. You can
+  {{{https://raw.github.com/BananaCode/BananaGen/master/src/args.yml}get the list here}},
+  or from inside the plugin jar.
+
+  At the top of the list, there is the following:
+
++------------------------------------------------------------------------------+
+hilly:
+    nopopulate:
+        type: flag
+        description: Setting this flag will disable populators
++------------------------------------------------------------------------------+
+
+  Walking through each line, this shows that the <<<hilly>>> generator can use the
+  <<<nopopulate>>> <<<flag>>> in its options, which <<<will disable populators>>>.
+  There are four `type`s used in BananaGen: <<<flag>>>, <<<string>>>, <<<integer>>>,
+  and <<<double>>>.
+
+  * <<<flag>>>s have no value and are either set or not set. For example, a
+    generator could be defined as <<<hilly,nopopulate>>> to use the <<<hilly>>>
+    generator but disable all populators.
+
+  * <<<string>>>s have a text value, like <<<SAND>>>.
+
+  * <<<integer>>>s and <<<double>>>s are numbers, whole or with a decimal point,
+    respectively. Sometimes there are minimum and maximum values.
+
+  []
+
++------------------------------------------------------------------------------+
+waterlevel:
+    type: integer
+    description: Up to this height, valleys made by the base chunk generator will be filled with liquid (water normally, lava for nether)
+    default: 64
+    min: 0
+    max: 127
++------------------------------------------------------------------------------+
+
+  Walking through this example, we see that the <<<waterlevel>>> <<<integer>>>
+  will change the height of water the generator makes. It starts (<<<default>>>)
+  at 64, but you can put it anywhere from (<<<min>>>) 0 to (<<<max>>>) 127.
+
+  Here are a few visual examples:
+
+[http://i.imgur.com/sL6hS.png] hilly
+
+[http://i.imgur.com/CUzi1.png] hilly,nether
+
+  Both images are generated using the `hilly` generator with the same seed
+  (1795116593915449260 for anyone who's interested). The top image was made using
+  <<<hilly>>>, and the bottom image was made using <<<hilly,nether>>>. This shows
+  how a simple change can drastically alter how a world looks without changing
+  the basic shape of the terrain.
