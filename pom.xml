@@ -100,7 +100,7 @@
 	</dependencies>
 
 	<build>
-		<defaultGoal>clean javadoc:javadoc install</defaultGoal>
+		<defaultGoal>clean install</defaultGoal>
 
 		<sourceDirectory>${basedir}/src/</sourceDirectory>
 		<testSourceDirectory>${basedir}/tests/</testSourceDirectory>
@@ -168,27 +168,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.8</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>javadoc</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<links>
-						<link>http://jd.bukkit.org/apidocs/</link>
-						<link>http://jnbt.sourceforge.net/doc/</link>
-					</links>
-					<excludePackageNames>net.llamaslayers.minecraft.banana.gen.generators.core,net.llamaslayers.minecraft.banana.gen.populators.core,org.jnbt</excludePackageNames>
-					<notimestamp>true</notimestamp>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
@@ -237,10 +216,23 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.4</version>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8</version>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<siteDirectory>${basedir}/site</siteDirectory>
+					<links>
+						<link>http://jd.bukkit.org/apidocs/</link>
+						<link>http://jnbt.sourceforge.net/doc/</link>
+					</links>
+					<excludePackageNames>net.llamaslayers.minecraft.banana.gen.generators.core,net.llamaslayers.minecraft.banana.gen.populators.core,org.jnbt</excludePackageNames>
+					<notimestamp>true</notimestamp>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -249,7 +241,7 @@
 				<version>3.0-beta-3</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>site</phase>
 						<goals>
 							<goal>site</goal>
 						</goals>
@@ -279,6 +271,23 @@
 			</extension>
 		</extensions>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<siteDirectory>${basedir}/site</siteDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.3.3-SNAPSHOT</version>
+			</plugin>
+		</plugins>
+	</reporting>
 	<profiles>
 		<profile>
 			<id>dev</id>
