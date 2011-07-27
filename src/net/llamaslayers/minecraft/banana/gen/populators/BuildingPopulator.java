@@ -12,8 +12,11 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -23,6 +26,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
+import org.jnbt.ByteArrayTag;
+import org.jnbt.CompoundTag;
+import org.jnbt.IntTag;
+import org.jnbt.NBTInputStream;
+import org.jnbt.ShortTag;
+import org.jnbt.StringTag;
+import org.jnbt.Tag;
 
 /**
  * Populates using BO2 files. An editor is available at <a
@@ -40,6 +51,10 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 	 *            The folder to look for building .bo2 files in
 	 */
 	protected BuildingPopulator(String category) {
+		this(category, "buildings");
+	}
+
+	BuildingPopulator(String category, String buildingType) {
 		buildings = new HashMap<String, Building>();
 		groups = new HashMap<String, List<Building>>();
 		Enumeration<JarEntry> schematics;
@@ -55,7 +70,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 		}
 		while (schematics.hasMoreElements()) {
 			JarEntry schematic = schematics.nextElement();
-			if (!schematic.getName().startsWith("buildings/" + category + "/")) {
+			if (!schematic.getName().startsWith(buildingType + "/" + category + "/")) {
 				continue;
 			}
 
@@ -69,18 +84,54 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 			Building building = new Building(buildingName);
 			buildings.put(buildingName, building);
 			try {
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						jar.getInputStream(schematic)));
-				while (building.parseLine(in.readLine())) {
-					;
+				if (buildingType.equals("buildings")) {
+					BufferedReader in = new BufferedReader(new InputStreamReader(
+							jar.getInputStream(schematic)));
+					while (building.parseLine(in.readLine()));
+					in.close();
+					building.produceRotatedVersions();
+				} else if (buildingType.equals("schematics")) {
+					NBTInputStream in = new NBTInputStream(new GZIPInputStream(
+							jar.getInputStream(schematic)));
+
+					try {
+						building.parseSchematic(in);
+					} catch (NoSuchFieldException ex) {
+						throw new IOException(ex);
+					} finally {
+						in.close();
+					}
+				} else {
+					throw new IllegalStateException("BuildingPopulator(String, String) should not be used directly");
 				}
-				in.close();
-				building.produceRotatedVersions();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 				buildings.remove(buildingName);
 			}
 		}
+	}
+
+	/**
+	 * Get child tag of a NBT structure. From WorldEdit.
+	 *
+	 * @param items
+	 * @param key
+	 * @param expected
+	 * @return child tag
+	 * @throws DataException
+	 */
+	static Tag getChildTag(Map<String, Tag> items, String key,
+						   Class<? extends Tag> expected) throws NoSuchFieldException {
+
+		if (!items.containsKey(key)) {
+			throw new NoSuchFieldException("Schematic file is missing a \"" + key + "\" tag");
+		}
+		Tag tag = items.get(key);
+		if (!expected.isInstance(tag)) {
+			throw new NoSuchFieldException(
+					key + " tag is not of tag type " + expected.getName());
+		}
+		return tag;
 	}
 
 	/**
@@ -102,7 +153,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 	protected Building getAnyBuilding(Random random) {
 		List<Building> acceptable = getAllBuildings();
 
-		if (acceptable.size() == 0) {
+		if (acceptable.isEmpty()) {
 			return null;
 		}
 
@@ -139,7 +190,7 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 	protected Building getRandomBuilding(Block seed, Random random) {
 		List<Building> acceptable = getPossibleBuildings(seed);
 
-		if (acceptable.size() == 0) {
+		if (acceptable.isEmpty()) {
 			return null;
 		}
 
@@ -224,6 +275,83 @@ public abstract class BuildingPopulator extends BananaBlockPopulator {
 				minZ = Math.min(minZ, newBlock.z);
 				blocks.add(newBlock);
 			}
+		}
+
+		// Logic derived heavily from https://github.com/sk89q/worldedit/blob/master/src/main/java/com/sk89q/worldedit/CuboidClipboard.java
+		void parseSchematic(NBTInputStream in) throws NoSuchFieldException, IOException {
+			Vector origin = new Vector();
+			Vector offset = new Vector();
+
+			// Schematic tag
+			CompoundTag schematicTag = (CompoundTag) in.readTag();
+			if (!schematicTag.getName().equals("Schematic")) {
+				throw new IOException("Tag \"Schematic\" does not exist or is not first");
+			}
+
+			// Check
+			Map<String, Tag> schematic = schematicTag.getValue();
+			if (!schematic.containsKey("Blocks")) {
+				throw new NoSuchFieldException("Schematic file is missing a \"Blocks\" tag");
+			}
+
+			// Get information
+			short width = (Short) getChildTag(schematic, "Width", ShortTag.class).getValue();
+			short length = (Short) getChildTag(schematic, "Length", ShortTag.class).getValue();
+			short height = (Short) getChildTag(schematic, "Height", ShortTag.class).getValue();
+
+			try {
+				int originX = (Integer) getChildTag(schematic, "WEOriginX", IntTag.class).getValue();
+				int originY = (Integer) getChildTag(schematic, "WEOriginY", IntTag.class).getValue();
+				int originZ = (Integer) getChildTag(schematic, "WEOriginZ", IntTag.class).getValue();
+				origin = new Vector(originX, originY, originZ);
+			} catch (NoSuchFieldException e) {
+				// No origin data
+			}
+
+			try {
+				int offsetX = (Integer) getChildTag(schematic, "WEOffsetX", IntTag.class).getValue();
+				int offsetY = (Integer) getChildTag(schematic, "WEOffsetY", IntTag.class).getValue();
+				int offsetZ = (Integer) getChildTag(schematic, "WEOffsetZ", IntTag.class).getValue();
+				offset = new Vector(offsetX, offsetY, offsetZ);
+			} catch (NoSuchFieldException e) {
+				// No offset data
+			}
+
+			// Check type of Schematic
+			String materials = (String) getChildTag(schematic, "Materials", StringTag.class).getValue();
+			if (!materials.equals("Alpha")) {
+				throw new IOException("Schematic file is not an Alpha schematic");
+			}
+
+			// Get blocks
+			byte[] _blocks = (byte[]) getChildTag(schematic, "Blocks", ByteArrayTag.class).getValue();
+			byte[] _blockData = (byte[]) getChildTag(schematic, "Data", ByteArrayTag.class).getValue();
+
+			// Tile entities are not implemented
+
+			// begin implementation-specific section
+			spawnDark = true;
+			spawnLight = true;
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					for (int z = 0; z < length; z++) {
+						BuildingBlock block = new BuildingBlock(
+								x + origin.getBlockX() + offset.getBlockX(),
+								y + origin.getBlockY() + offset.getBlockY(),
+								z + origin.getBlockZ() + offset.getBlockZ(),
+								_blocks[(x * length + z) * height + y],
+								_blockData[(x * length + z) * height + y]);
+						maxX = Math.max(maxX, block.x);
+						minX = Math.min(minX, block.x);
+						maxY = Math.max(maxY, block.y);
+						minY = Math.min(minY, block.y);
+						maxZ = Math.max(maxZ, block.z);
+						minZ = Math.min(minZ, block.z);
+						blocks.add(block);
+					}
+				}
+			}
+			// end implementation-specific section
 		}
 
 		boolean parseLine(String line) {
