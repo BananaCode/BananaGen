@@ -137,7 +137,7 @@ public class SubterranianGenerator extends BananaChunkGenerator implements Under
 	}
 
 	private double convertPointyThings(OctaveGenerator noise, int x, int z, int height) {
-		return Math.max(noise.noise(x, z, 0.5, 0.5, true) * height * 3 / 2 - height / 2, 0);
+		return Math.max(noise.noise(x, z, 0.5, 0.5, true) * height * 3.0 / 2.0 - height / 2.0, 0);
 	}
 
 	@Override

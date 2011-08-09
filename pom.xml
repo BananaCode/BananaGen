@@ -8,7 +8,7 @@
 	<artifactId>bananagen</artifactId>
 	<version>0.1</version>
 	<name>BananaGen</name>
-	<url>https://github.com/BananaCode/BananaGen/wiki</url>
+	<url>https://bananacode.github.com/BananaGen</url>
 	<description>BananaGen is a chunk generator/block populator suite for Bukkit, a modification of the Minecraft server, with infinite possibilities via its easily configurable generators.</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,6 +17,7 @@
 		<name>BananaCode</name>
 		<url>https://github.com/BananaCode</url>
 	</organization>
+	<inceptionYear>2011</inceptionYear>
 	<developers>
 		<developer>
 			<name>codename_B</name>
@@ -282,9 +283,22 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<excludes>
+						<exclude>**/core/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>2.3.2</version>
+				<configuration>
+					<effort>Max</effort>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
