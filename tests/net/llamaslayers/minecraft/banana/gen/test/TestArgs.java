@@ -14,7 +14,8 @@ import net.llamaslayers.minecraft.banana.gen.Args;
 import net.llamaslayers.minecraft.banana.gen.GenPlugin;
 
 import org.bukkit.generator.BlockPopulator;
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration; 
 import org.junit.Test;
 
 /**
@@ -26,11 +27,10 @@ public class TestArgs {
 	 */
 	@SuppressWarnings("static-method")
 	@Test
-	public void test() {
+	public void test() throws IOException {
 		String failarg = null;
 		String failgen = null;
-		Configuration args = new Configuration(new File("src/args.yml"));
-		args.load();
+		FileConfiguration args =  YamlConfiguration.loadConfiguration(new File("src/args.yml"));
 		for (String generator : GenPlugin.generators.keySet()) {
 			Set<String> knownArgs = new HashSet<String>();
 
@@ -66,7 +66,7 @@ public class TestArgs {
 				ex.printStackTrace();
 			}
 		}
-		args.save();
+		args.save(new File("src/args.yml"));
 
 		if (failarg != null && failgen != null) {
 			fail("Arg " + failarg + " for generator " + failgen
@@ -75,7 +75,7 @@ public class TestArgs {
 	}
 
 	private static String checkSource(File source, String generator,
-		Set<String> knownArgs, Configuration args) throws IOException {
+		Set<String> knownArgs, FileConfiguration args) throws IOException {
 		byte[] buffer = new byte[(int) source.length()];
 		FileInputStream in = new FileInputStream(source);
 		in.read(buffer);

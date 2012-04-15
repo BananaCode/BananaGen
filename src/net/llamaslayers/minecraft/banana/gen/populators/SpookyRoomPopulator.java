@@ -12,7 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 
 /**
  * BlockPopulator that generates rooms made of nether materials, spider webs,
@@ -107,13 +107,13 @@ public class SpookyRoomPopulator extends BananaBlockPopulator {
 						if (state instanceof CreatureSpawner) {
 							CreatureSpawner spawner = (CreatureSpawner) state;
 							if (floor <= 2) {
-								spawner.setCreatureType(CreatureType.ZOMBIE);
+								spawner.setSpawnedType(EntityType.ZOMBIE);
 							} else if (floor >= 3 && floor <= 7) {
-								spawner.setCreatureType(CreatureType.SPIDER);
+								spawner.setSpawnedType(EntityType.SPIDER);
 							} else if (floor >= 8 && floor <= 10) {
-								spawner.setCreatureType(CreatureType.SKELETON);
+								spawner.setSpawnedType(EntityType.SKELETON);
 							} else {
-								spawner.setCreatureType(CreatureType.GHAST);
+								spawner.setSpawnedType(EntityType.GHAST);
 							}
 						} else {
 							Bukkit.getServer().getLogger().severe("Spawner is not giving correct state, returned "

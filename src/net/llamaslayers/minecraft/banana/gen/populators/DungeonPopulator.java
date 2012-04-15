@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
@@ -118,15 +118,15 @@ public class DungeonPopulator extends BananaBlockPopulator {
 	}
 
 	private static void placeSpawner(Random random, Block block) {
-		CreatureType[] types = new CreatureType[] {
-			CreatureType.SKELETON, CreatureType.ZOMBIE,
-			CreatureType.CREEPER, CreatureType.SPIDER
+		EntityType[] types = new EntityType[] {
+			EntityType.SKELETON, EntityType.ZOMBIE,
+			EntityType.CREEPER, EntityType.SPIDER
 		};
 
 		block.setType(Material.MOB_SPAWNER);
 		BlockState state = block.getState();
 		if (state instanceof CreatureSpawner) {
-			((CreatureSpawner) state).setCreatureType(types[random.nextInt(types.length)]);
+			((CreatureSpawner) state).setSpawnedType(types[random.nextInt(types.length)]);
 		} else {
 			Bukkit.getServer().getLogger().severe("Spawner is not giving correct state, returned "
 					+ state

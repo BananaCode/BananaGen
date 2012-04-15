@@ -3,8 +3,9 @@ package net.llamaslayers.minecraft.banana.gen;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.llamaslayers.minecraft.banana.gen.from.com.dinnerbone.bukkit.smooth.WorldRenderer;
 import net.llamaslayers.minecraft.banana.gen.generators.BeachGenerator;
@@ -17,12 +18,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Nightgunner5
@@ -56,10 +59,25 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 	public void onEnable() {
 		getServer().getLogger().info("[BananaGen] Starting...");
 		instance = this;
-		if (getConfiguration().getBoolean("load_worlds", true))
+		if (getConfig().getBoolean("load_worlds", true))
 			getServer().getScheduler().scheduleSyncDelayedTask(this, this);
 	}
 
+	/*
+    public void reloadCustomConfig() {
+        if (customConfigFile == null) {
+        customConfigFile = new File(getDataFolder(), "customConfig.yml");
+        }
+        customConfig = YamlConfiguration.loadConfiguration(customConfigFile);
+     
+        // Look for defaults in the jar
+        InputStream defConfigStream = getResource("customConfig.yml");
+        if (defConfigStream != null) {
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            customConfig.setDefaults(defConfig);
+        }
+    }
+	*/
 	@Override
 	public void run() {
 		for (String conf : new String[] {/* CraftBukkit */"bukkit.yml", /* Glowstone */
@@ -68,12 +86,14 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 			if (!confFile.exists()) {
 				continue;
 			}
+			
+		    FileConfiguration bukkitYML = null;
+		    //File customConfigurationFile = null;
+		    bukkitYML = YamlConfiguration.loadConfiguration(confFile);
 
-			Configuration bukkitYML = new Configuration(
-					confFile);
-			bukkitYML.load();
+			//bukkitYML.load();
 
-			List<String> worlds = bukkitYML.getKeys("worlds");
+			Set<String> worlds = bukkitYML.getConfigurationSection("worlds").getKeys(false);
 			if (worlds != null) {
 				for (String world : worlds) {
 					if (bukkitYML.getString(
@@ -85,7 +105,11 @@ public class GenPlugin extends JavaPlugin implements Runnable {
 						// Get the new args into the cache even if the world is already loaded
 						ChunkGenerator theGenerator = getDefaultWorldGenerator(world, generator.substring(generator.indexOf(':') + 1));
 						if (getServer().getWorld(world) == null) {
-							getServer().createWorld(world, theGenerator instanceof UndergroundGenerator ? Environment.NETHER : Environment.NORMAL, theGenerator);
+							WorldCreator wc = new WorldCreator(generator);
+							wc.environment(theGenerator instanceof UndergroundGenerator ? Environment.NETHER : Environment.NORMAL).generator(theGenerator);
+							getServer().createWorld(wc);
+							//getServer().createWorld(
+								//	(world, theGenerator instanceof UndergroundGenerator ? Environment.NETHER : Environment.NORMAL, theGenerator);
 						}
 					}
 				}
